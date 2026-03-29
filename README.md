@@ -7,9 +7,11 @@ Fichiers de données, mise à part des fichiers de logique et de style
  * ✅  Aucune clé secrète dans ce fichier.
  *    L'authentification admin et la signature HMAC se font côté serveur Vercel.
  *
+
  * Dépend de : js/shared.js (chargé avant dans le HTML)
  */
-
+api/generate.js  —  Vercel Serverless Function
+// Corrigé : mélange require/export default → tout en ESM (import/export)
 
 TransferLink v4.2 — shared.js
  * Chargement de config.json + utilitaires communs
