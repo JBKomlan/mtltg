@@ -1,4 +1,13 @@
-
+/**
+ * TransferLink v4.2 — transfer.js
+ * Page client : reçoit ?token= (chiffré AES-256-GCM), appelle /api/verify,
+ * affiche les boutons de paiement si le token est valide.
+ *
+ * ✅ Aucune donnée sensible lisible dans l'URL.
+ * ✅ Aucune clé secrète dans ce fichier.
+ *
+ * Dépend de : js/shared.js
+ */
 
 const COPY_ICON = `<svg viewBox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>`;
 const OK_ICON   = `<svg viewBox="0 0 24 24" fill="#28a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
@@ -14,33 +23,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 2. Lire les paramètres d'URL
-  const qs = new URLSearchParams(window.location.search);
-  const p = {
-    mt:  qs.get("mt"),
-    n1:  qs.get("n1")  ?? "",
-    id1: qs.get("id1") ?? "",
-    n2:  qs.get("n2")  ?? "",
-    id2: qs.get("id2") ?? "",
-    e:   qs.get("e"),
-    f:   qs.get("f"),
-    d:   qs.get("d"),
-    s:   qs.get("s"),
-  };
+  // 2. Lire le token dans l'URL
+  const qs    = new URLSearchParams(window.location.search);
+  const token = qs.get("token");
 
-  // 3. Paramètres minimaux présents ?
-  if (!p.mt || !p.d || !p.s) {
-    app.innerHTML = erreurHTML("🚫 Lien invalide — paramètres manquants.");
+  if (!token) {
+    app.innerHTML = erreurHTML("🚫 Lien invalide — token manquant.");
     return;
   }
 
-  // 4. ✅ Vérification via l'API serveur (la clé ne quitte jamais Vercel)
+  // 3. ✅ Vérification + déchiffrement côté serveur
+  //    Le navigateur envoie juste le token opaque, le serveur renvoie le payload
   let verif;
   try {
-    const apiRes = await fetch(
-      `/api/verify?${new URLSearchParams({ mt: p.mt, n1: p.n1, n2: p.n2, e: p.e, f: p.f, d: p.d, s: p.s }).toString()}`
-    );
-    verif = await apiRes.json();
+    const res = await fetch(`/api/verify?token=${encodeURIComponent(token)}`);
+    verif = await res.json();
   } catch {
     app.innerHTML = erreurHTML("⚠️ Impossible de vérifier le lien. Vérifiez votre connexion.");
     return;
@@ -49,12 +46,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!verif.valid) {
     const raison = verif.expired
       ? "Ce lien a dépassé sa période de validité de 30 jours."
-      : "Ce lien n'est pas certifié ou a été modifié.";
+      : "Ce lien est invalide ou a été falsifié.";
     app.innerHTML = erreurHTML(`🚫 Lien invalide ou expiré.<br><small>${raison}</small>`);
     return;
   }
 
-  // 5. Lien valide → afficher l'UI
+  // 4. ✅ Payload déchiffré disponible — afficher l'interface
+  const p = verif.payload; // { mt, n1, id1, n2, id2, e, f, iat }
   app.innerHTML = buildUI(p);
 
   const mtField = document.getElementById("mtField");
@@ -62,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   drawButtons(p);
 });
 
-/* ---------- Construction de l'UI principale ---------- */
+/* ---------- Construction de l'UI ---------- */
 function buildUI(p) {
   const readonlyAttr = p.e === "0" ? "readonly" : "";
   return `
@@ -74,13 +72,14 @@ function buildUI(p) {
     </div>
 
     <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
-    <input type="number" id="mtField" class="amount-input" value="${p.mt}" min="${p.mt}" ${readonlyAttr}>
+    <input type="number" id="mtField" class="amount-input"
+           value="${p.mt}" min="${p.mt}" ${readonlyAttr}>
 
     <div id="btns"></div>
 
     <div class="help-text">
-      💡 En cas de souci avec le bouton de transfert, utilisez l'icône de copie qui apparaît à droite
-      après le clic, pour coller le code manuellement dans votre clavier d'appel.
+      💡 En cas de souci avec le bouton de transfert, utilisez l'icône de copie qui apparaît
+      à droite après le clic, pour coller le code manuellement dans votre clavier d'appel.
     </div>
 
     <a href="https://wa.me/22898390629?text=${encodeURIComponent("Salut, Je viens de découvrir TransferLink. J'aimerais en savoir plus pour booster mon business en ligne.")}"
@@ -89,8 +88,7 @@ function buildUI(p) {
     </a>
 
     <div class="disclaimer">
-      <b>Disclaimer :</b> L'initiative TransferLink vise à rapprocher le Mobile Money des réseaux sociaux et à
-      simplifier les transferts d'argent. Veuillez vérifier le montant, le numéro et l'identité du destinataire
+      <b>Disclaimer :</b> Vérifiez le montant, le numéro et l'identité du destinataire
       avant toute validation finale. Nous déclinons toute responsabilité en cas d'erreur de saisie.
     </div>
 
@@ -98,12 +96,12 @@ function buildUI(p) {
   `;
 }
 
-/* ---------- Rendu des boutons selon le montant saisi ---------- */
+/* ---------- Rendu des boutons USSD ---------- */
 function drawButtons(p) {
-  const btnsEl   = document.getElementById("btns");
-  const val       = parseFloat(document.getElementById("mtField").value) || 0;
+  const btnsEl      = document.getElementById("btns");
+  const val         = parseFloat(document.getElementById("mtField").value) || 0;
   const minAutorise = parseFloat(p.mt) || 0;
-  const suffixe   = p.f === "1" ? "2" : "1";
+  const suffixe     = p.f === "1" ? "2" : "1";
 
   if (val < minAutorise) {
     btnsEl.innerHTML = `<div class="warn-min">⚠️ Le montant ne peut pas être inférieur à ${formatMontant(minAutorise)}.</div>`;
@@ -112,25 +110,23 @@ function drawButtons(p) {
 
   let html = "";
 
-  // --- Mixx by Yas (T-Money) ---
   if (p.n1 && p.n1.length === 8) {
-    const code = `*145*1*${val}*${p.n1}*${suffixe}#`;
+    const code  = `*145*1*${val}*${p.n1}*${suffixe}#`;
     const label = `🔵 MiXX → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
-    html += btnRow("t", "tmoney", code, label, p.n1.replace(/#/g, "%23"));
+    html += btnRow("t", "tmoney", code, label);
   }
 
-  // --- Moov Money Flooz ---
   if (p.n2 && p.n2.length === 8) {
-    const code = `*155*1*1*${p.n2}*${p.n2}*${val}*${suffixe}#`;
+    const code  = `*155*1*1*${p.n2}*${p.n2}*${val}*${suffixe}#`;
     const label = `🟡 FlOOZ → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
-    html += btnRow("m", "flooz", code, label, p.n2.replace(/#/g, "%23"));
+    html += btnRow("m", "flooz", code, label);
   }
 
   btnsEl.innerHTML = html;
 }
 
-/* ---------- Génère une ligne bouton + icône copie ---------- */
-function btnRow(id, cls, code, label, telCode) {
+/* ---------- Ligne bouton + icône copie ---------- */
+function btnRow(id, cls, code, label) {
   const telHref = "tel:" + code.replace(/#/g, "%23");
   return `
     <div class="btn-container">
@@ -141,7 +137,6 @@ function btnRow(id, cls, code, label, telCode) {
     </div>`;
 }
 
-/* ---------- Affiche le bouton copie après un clic de paiement ---------- */
 function showCopy(id) {
   setTimeout(() => {
     const btn = document.getElementById("cp-" + id);
@@ -149,7 +144,6 @@ function showCopy(id) {
   }, 500);
 }
 
-/* ---------- Copie le code USSD dans le presse-papier ---------- */
 function copyToClipboard(btn, code) {
   navigator.clipboard.writeText(code).then(() => {
     const old = btn.innerHTML;
@@ -160,7 +154,6 @@ function copyToClipboard(btn, code) {
   });
 }
 
-/* ---------- HTML d'erreur ---------- */
 function erreurHTML(msg) {
   return `<div class="state-error"><h3>${msg}</h3></div>`;
 }
