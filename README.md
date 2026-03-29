@@ -25,4 +25,20 @@ TransferLink v4.2 — shared.js
  *    La vérification HMAC se fait entièrement côté serveur (Vercel).
  *
  * Dépend de : js/shared.js (chargé avant dans le HTML)
+
  */
+
+ Nouveau 
+ /**
+ * TransferLink v4.2 — transfer.js
+ * Page client : reçoit ?token= (chiffré AES-256-GCM), appelle /api/verify,
+ * affiche les boutons de paiement si le token est valide.
+ *
+ * ✅ Aucune donnée sensible lisible dans l'URL.
+ * ✅ Aucune clé secrète dans ce fichier.
+ *
+ * Dépend de : js/shared.js
+
+ */
+
+ 
