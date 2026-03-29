@@ -1,0 +1,140 @@
+/* ============================================================
+   TransferLink v4.2 — Transfer page (transfer.html)
+   ============================================================ */
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.card { text-align: center; }
+
+/* ---------- Reassurance banner ---------- */
+.reassurance {
+  font-size: 12px;
+  color: #2d3748;
+  background: #ebf8ff;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 1px dashed #4299e1;
+}
+
+/* ---------- Amount input ---------- */
+.amount-input {
+  width: 100%;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid #0056b3;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 15px 0;
+  transition: border-color 0.2s;
+}
+.amount-input[readonly] {
+  background: #f8f9fa;
+  border-color: #cbd5e0;
+  color: #4a5568;
+}
+.amount-input:focus {
+  outline: none;
+  border-color: #003d8a;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+}
+
+/* ---------- Payment button row ---------- */
+.btn-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-pay {
+  flex: 1;
+  padding: 16px 10px;
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: filter 0.2s, transform 0.1s;
+  line-height: 1.3;
+}
+.btn-pay:active { transform: scale(0.97); filter: brightness(0.9); }
+
+.btn-pay.tmoney { background: #007bff; }
+.btn-pay.flooz  { background: #ffc107; color: #333; }
+
+/* ---------- Copy icon button ---------- */
+.btn-copy {
+  display: none; /* shown by JS after click */
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, background 0.15s;
+}
+.btn-copy:active { transform: scale(0.9); background: #e2e8f0; }
+.btn-copy svg    { width: 22px; height: 22px; fill: #64748b; }
+
+/* ---------- Minimum-amount warning ---------- */
+.warn-min {
+  color: #dc3545;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+/* ---------- Help text ---------- */
+.help-text {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 15px;
+  line-height: 1.4;
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+/* ---------- WhatsApp promo ---------- */
+@keyframes pulse-green {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0   rgba(37, 211, 102, 0.7); }
+  70%  { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);   }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(37, 211, 102, 0);   }
+}
+
+.btn-wa-promo {
+  display: inline-block;
+  background: #25D366;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 20px;
+  animation: pulse-green 2s infinite;
+  transition: background 0.2s;
+}
+
+/* ---------- Footer copyright ---------- */
+.footer-copy {
+  font-size: 10px;
+  color: #a0aec0;
+  margin-top: 15px;
+  text-align: center;
+}
