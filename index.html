@@ -1,63 +1,98 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TransferLink - Console Admin</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TransferLink — Admin</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
 <div class="card">
-    <div class="logo-container">
-        <span class="logo-text">TransferLink Admin</span>
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="https://raw.githubusercontent.com/JBKomlan/mtl/main/logomtl.png" alt="Logo TransferLink" class="logo-img">
+    <span class="logo-text">TransferLink ★</span>
+  </div>
+
+  <!-- Auth -->
+  <div class="auth-zone">
+    <label for="adminPass">🔑 Code de Sécurité Admin</label>
+    <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
+  </div>
+
+  <!-- Client -->
+  <label for="numClient">📞 WhatsApp Client (numéro complet avec indicatif)</label>
+  <input type="tel" id="numClient" placeholder="Ex : 22890000000" inputmode="numeric">
+
+  <!-- Montant -->
+  <label for="montant">💰 Montant Initial (FCFA)</label>
+  <input type="number" id="montant" placeholder="Ex : 5000" min="1">
+
+  <!-- Options -->
+  <div class="options-zone">
+    <label>
+      <input type="checkbox" id="allowEdit"> ✏️ Modifiable
+    </label>
+    <label>
+      <input type="checkbox" id="addFrais"> 📈 Frais 1 %
+    </label>
+  </div>
+
+  <!-- Mixx by Yas -->
+  <div class="net-section tmoney">
+    <label>🔵 Mixx by Yas (90 / 91 / 92 / 93 / 70 / 71 / 72)</label>
+    <div class="phone-input">
+      <span class="prefix">+228</span>
+      <input
+        type="tel"
+        id="n1"
+        placeholder="90123456"
+        inputmode="numeric"
+        maxlength="8"
+      >
     </div>
+    <span class="error-hint" id="hint-n1"></span>
+    <input type="text" id="id1" placeholder="Nom du bénéficiaire (optionnel)">
+  </div>
 
-    <label>💰 Montant Initial (FCFA)</label>
-    <input type="number" id="amount" placeholder="5000">
-
-    <label>🔵 Numéro Mixx (T-Money)</label>
-    <input type="text" id="n1" placeholder="90XXXXXX">
-
-    <label>🟡 Numéro Flooz</label>
-    <input type="text" id="n2" placeholder="96XXXXXX">
-
-    <button onclick="requestLink()">Générer le lien sécurisé</button>
-
-    <div id="result-area" style="display:none; margin-top:20px;">
-        <input type="text" id="final-link" readonly>
-        <button onclick="copyLink()">Copier le lien</button>
+  <!-- Moov Money Flooz -->
+  <div class="net-section flooz">
+    <label>🟡 Moov Money Flooz (79 / 96 / 97 / 98 / 99)</label>
+    <div class="phone-input">
+      <span class="prefix">+228</span>
+      <input
+        type="tel"
+        id="n2"
+        placeholder="96123456"
+        inputmode="numeric"
+        maxlength="8"
+      >
     </div>
+    <span class="error-hint" id="hint-n2"></span>
+    <input type="text" id="id2" placeholder="Nom du bénéficiaire (optionnel)">
+  </div>
+
+  <!-- Bouton -->
+  <button class="btn-generate" id="btn-generer">Générer le lien sécurisé</button>
+
+  <!-- Résultat -->
+  <div id="result">
+    <p id="resume"></p>
+    <div id="waArea"></div>
+  </div>
+
+  <div class="disclaimer">
+    <b>Disclaimer :</b> Vérifiez scrupuleusement les informations avant de générer le lien.
+    Les préfixes sont validés selon les normes Togo Cellulaire (Mixx by Yas) et Moov Money.
+  </div>
+
 </div>
 
-<script>
-    async function requestLink() {
-        const payload = {
-            mt: document.getElementById('amount').value,
-            n1: document.getElementById('n1').value,
-            n2: document.getElementById('n2').value,
-            id1: "Client", // Optionnel
-            id2: "Client"
-        };
-
-        const queryString = new URLSearchParams(payload).toString();
-        
-        // Appel à l'API de génération Vercel
-        const response = await fetch(`/api/generate?${queryString}`);
-        const data = await response.json();
-
-        if(data.url) {
-            document.getElementById('result-area').style.display = 'block';
-            document.getElementById('final-link').value = data.url;
-        }
-    }
-
-    function copyLink() {
-        const copyText = document.getElementById("final-link");
-        copyText.select();
-        document.execCommand("copy");
-        alert("Lien copié !");
-    }
-</script>
+<!-- Scripts : shared.js en premier, puis index.js -->
+<script src="js/shared.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>
