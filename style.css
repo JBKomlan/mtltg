@@ -1,0 +1,23 @@
+:root {
+    --primary: #0056b3;
+    --secondary: #d4af37;
+    --bg: #f0f2f5;
+    --white: #ffffff;
+}
+
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+
+.card { background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+
+.logo-text { font-size: 24px; font-weight: 800; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; display: block; }
+
+.amount-input { width: 100%; font-size: 28px; font-weight: bold; text-align: center; border: 2px solid var(--primary); border-radius: 12px; padding: 10px; margin: 15px 0; box-sizing: border-box; }
+
+.btn-pay { display: block; padding: 15px; margin: 10px 0; border-radius: 12px; text-decoration: none; color: white; font-weight: bold; transition: 0.3s; }
+
+.btn-tmoney { background: #007bff; }
+.btn-flooz { background: #ffc107; color: #333; }
+
+.reassurance { font-size: 12px; background: #ebf8ff; padding: 10px; border-radius: 8px; border: 1px dashed #4299e1; margin-bottom: 15px; }
+
+.error { color: #dc3545; background: #fff5f5; padding: 20px; border-radius: 12px; border: 1px solid #feb2b2; }
