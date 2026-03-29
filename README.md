@@ -17,3 +17,12 @@ TransferLink v4.2 — shared.js
 
 /** Config chargée depuis config.json (rempli par initConfig())
 
+/**
+ * TransferLink v4.2 — transfer.js
+ * Logique de la page Client : vérification via /api/verify (serveur) + affichage des boutons
+ *
+ * ✅  La clé secrète ne se trouve plus dans ce fichier ni dans le navigateur.
+ *    La vérification HMAC se fait entièrement côté serveur (Vercel).
+ *
+ * Dépend de : js/shared.js (chargé avant dans le HTML)
+ */
