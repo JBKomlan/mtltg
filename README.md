@@ -9,3 +9,11 @@ Fichiers de données, mise à part des fichiers de logique et de style
  *
  * Dépend de : js/shared.js (chargé avant dans le HTML)
  */
+
+
+TransferLink v4.2 — shared.js
+ * Chargement de config.json + utilitaires communs
+ */
+
+/** Config chargée depuis config.json (rempli par initConfig())
+
