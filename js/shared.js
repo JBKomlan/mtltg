@@ -1,9 +1,4 @@
-/**
- * TransferLink v4.2 — shared.js
- * Chargement de config.json + utilitaires communs
- */
 
-/** Config chargée depuis config.json (rempli par initConfig()) */
 let CONFIG = null;
 
 /**
