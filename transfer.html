@@ -1,64 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TransferLink - Paiement Sécurisé</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TransferLink — Paiement sécurisé</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="TransferLink — Paiement sécurisé">
+  <meta property="og:description" content="Réglez votre transfert en un clic vers un compte Mobile Money.">
+  <meta property="og:image"       content="https://raw.githubusercontent.com/JBKomlan/mtl/main/logomtl.png">
+  <meta property="og:type"        content="website">
+
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/transfer.css">
 </head>
 <body>
 
-<div id="app" class="card">
-    <div class="loader" id="status-msg">🔐 Chargement sécurisé...</div>
-</div>
+<!-- Contenu injecté par transfer.js -->
+<div id="app" class="card">🔐 Chargement sécurisé…</div>
 
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const configUrl = "config.json"; // À charger ou intégrer en variable
-
-    async function initTransfer() {
-        const app = document.getElementById('app');
-        
-        // 1. Appel à l'API de vérification Vercel
-        try {
-            const response = await fetch(`/api/verify?${urlParams.toString()}`);
-            const auth = await response.json();
-
-            if (!auth.valid) {
-                app.innerHTML = `<div class="error"><h3>🚫 Lien Invalide</h3><p>${auth.reason || ''}</p></div>`;
-                return;
-            }
-
-            renderUI();
-        } catch (err) {
-            app.innerHTML = `<div class="error">Erreur de connexion au serveur sécurisé.</div>`;
-        }
-    }
-
-    function renderUI() {
-        const mt = urlParams.get('mt');
-        const n1 = urlParams.get('n1');
-        const n2 = urlParams.get('n2');
-        const id1 = urlParams.get('id1');
-        
-        document.getElementById('app').innerHTML = `
-            <img src="logo.png" class="logo-img">
-            <span class="logo-text">TransferLink</span>
-            <div class="reassurance">ℹ️ Validez l'appel USSD sur votre téléphone après avoir cliqué.</div>
-            
-            <label class="label">Montant (FCFA)</label>
-            <input type="number" id="mtField" class="amount-input" value="${mt}" readonly>
-            
-            <div id="btns-container">
-                <a href="tel:*145*1*${mt}*${n1}*1%23" class="btn-pay btn-tmoney">🔵 Payer avec T-Money</a>
-                <a href="tel:*155*1*1*${n2}*${n2}*${mt}*1%23" class="btn-pay btn-flooz">🟡 Payer avec Flooz</a>
-            </div>
-            
-            <p class="help-text">💡 Utilisez l'icône de copie si le bouton ne lance pas l'appel.</p>
-        `;
-    }
-
-    window.onload = initTransfer;
-</script>
+<script src="js/shared.js"></script>
+<script src="js/transfer.js"></script>
 </body>
 </html>
