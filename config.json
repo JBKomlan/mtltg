@@ -1,0 +1,49 @@
+{
+  "project_metadata": {
+    "name": "TransferLink",
+    "version": "4.2",
+    "base_currency": "XOF",
+    "default_country_code": "TG"
+  },
+  "regional_settings": {
+    "TG": {
+      "country_name": "Togo",
+      "calling_code": "+228",
+      "networks": {
+        "tmoney": {
+          "provider_label": "Mixx by Yas",
+          "prefixes": ["90", "91", "92", "93", "70", "71", "72"],
+          "ussd_templates": {
+            "national": "*145*1*{{amount}}*{{phone}}*{{suffix}}#"
+          }
+        },
+        "flooz": {
+          "provider_label": "Moov Money Flooz",
+          "prefixes": ["96", "97", "98", "99", "79"],
+          "ussd_templates": {
+            "national": "*155*1*1*{{phone}}*{{phone}}*{{amount}}*{{suffix}}#",
+            "international": "*155*1*4*{{phone}}*{{amount}}#"
+          }
+        }
+      }
+    }
+  },
+  "i18n": {
+    "fr": {
+      "loading": "🔐 Chargement sécurisé...",
+      "amount_label": "Montant à régler (FCFA) :",
+      "btn_pay": "Régler maintenant",
+      "error_min": "⚠️ Le montant ne peut pas être inférieur à {{min}} FCFA.",
+      "error_invalid": "🚫 Lien invalide ou expiré",
+      "help_text": "💡 En cas de souci, copiez le code manuellement via l'icône à droite."
+    },
+    "en": {
+      "loading": "🔐 Secure loading...",
+      "amount_label": "Amount to pay (FCFA):",
+      "btn_pay": "Pay Now",
+      "error_min": "⚠️ Amount cannot be less than {{min}} FCFA.",
+      "error_invalid": "🚫 Invalid or expired link",
+      "help_text": "💡 If the button fails, use the copy icon to manually paste the code."
+    }
+  }
+}
