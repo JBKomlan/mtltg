@@ -1,12 +1,4 @@
-/**
- * TransferLink v4.2 — transfer.js
- * Logique de la page Client : vérification via /api/verify (serveur) + affichage des boutons
- *
- * ✅  La clé secrète ne se trouve plus dans ce fichier ni dans le navigateur.
- *    La vérification HMAC se fait entièrement côté serveur (Vercel).
- *
- * Dépend de : js/shared.js (chargé avant dans le HTML)
- */
+
 
 const COPY_ICON = `<svg viewBox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>`;
 const OK_ICON   = `<svg viewBox="0 0 24 24" fill="#28a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
