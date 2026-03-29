@@ -1,6 +1,4 @@
-/**
- * TransferLink v4.2 — transfer.js
- */
+
 
 const COPY_ICON = `<svg viewBox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>`;
 const OK_ICON   = `<svg viewBox="0 0 24 24" fill="#28a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
@@ -16,20 +14,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 2. Lire le token dans l'URL
-  const qs    = new URLSearchParams(window.location.search);
-  const token = qs.get("token");
+  // 2. Lire l'identifiant court dans l'URL
+  const qs = new URLSearchParams(window.location.search);
+  const id = qs.get("id");
 
-  if (!token) {
-    app.innerHTML = erreurHTML("🚫 Lien invalide — token manquant.");
+  if (!id) {
+    app.innerHTML = erreurHTML("🚫 Lien invalide — identifiant manquant.");
     return;
   }
 
-  // 3. ✅ Vérification + déchiffrement côté serveur
-  //    Le navigateur envoie juste le token opaque, le serveur renvoie le payload
+  // 3. ✅ Vérification côté serveur : Supabase → déchiffrement → payload
   let verif;
   try {
-    const res = await fetch(`/api/verify?token=${encodeURIComponent(token)}`);
+    const res = await fetch(`/api/verify?id=${encodeURIComponent(id)}`);
     verif = await res.json();
   } catch {
     app.innerHTML = erreurHTML("⚠️ Impossible de vérifier le lien. Vérifiez votre connexion.");
