@@ -55,22 +55,6 @@ function fillTemplate(tpl, vars) {
   return tpl.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? "");
 }
 
-/**
- * Signature légère côté client (btoa).
- * ⚠️  Pour une sécurité renforcée, utilisez l'API /api/generate (HMAC SHA-256).
- */
-function signClient(parts, secret) {
-  const chaine = parts.join("|") + "|" + secret;
-  return btoa(unescape(encodeURIComponent(chaine))).substring(0, 15);
-}
-
-/**
- * Vérifie la signature côté client.
- */
-function verifyClient(parts, secret, signature) {
-  return signClient(parts, secret) === signature;
-}
-
 /** Formate un montant en FCFA */
 function formatMontant(n) {
   return Number(n).toLocaleString("fr-FR") + " FCFA";
