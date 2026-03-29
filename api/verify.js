@@ -1,60 +1,77 @@
-// api/verify.js  —  Vercel Serverless Function
-// Déchiffrement AES-256-GCM : reçoit le token opaque, déchiffre, vérifie l'expiration.
+
 
 import crypto from "node:crypto";
 
-const ALGO      = "aes-256-gcm";
-const EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; // 30 jours
+const ALGO = "aes-256-gcm";
 
+/* ---------- Clé AES ---------- */
 function getKey() {
   const secret = process.env.SECRET_KEY;
-  if (!secret) throw new Error("SECRET_KEY non définie dans les variables d'environnement.");
+  if (!secret) throw new Error("SECRET_KEY non définie.");
   return crypto.createHash("sha256").update(secret).digest();
 }
 
-/**
- * Déchiffre un token base64url → objet payload.
- * Lève une erreur si le token est altéré (authTag invalide).
- */
+/* ---------- Déchiffrement AES-256-GCM ---------- */
 function decrypt(token) {
   const buf     = Buffer.from(token, "base64url");
-  const iv      = buf.subarray(0, 12);       // 12 premiers octets
-  const authTag = buf.subarray(12, 28);      // 16 octets suivants
-  const data    = buf.subarray(28);          // reste = ciphertext
+  const iv      = buf.subarray(0, 12);
+  const authTag = buf.subarray(12, 28);
+  const data    = buf.subarray(28);
 
-  const key      = getKey();
-  const decipher = crypto.createDecipheriv(ALGO, key, iv);
+  const decipher = crypto.createDecipheriv(ALGO, getKey(), iv);
   decipher.setAuthTag(authTag);
 
-  const decrypted = Buffer.concat([decipher.update(data), decipher.final()]);
-  return JSON.parse(decrypted.toString("utf8"));
+  const dec = Buffer.concat([decipher.update(data), decipher.final()]);
+  return JSON.parse(dec.toString("utf8"));
 }
 
-export default function handler(req, res) {
-  const { token } = req.query;
+/* ---------- Lecture Supabase ---------- */
+async function supabaseGet(id) {
+  const url = `${process.env.SUPABASE_URL}/rest/v1/transfer_links?id=eq.${id}&select=token,expires_at`;
+  const res = await fetch(url, {
+    headers: {
+      "apikey"       : process.env.SUPABASE_SERVICE_KEY,
+      "Authorization": `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+    },
+  });
+  if (!res.ok) throw new Error("Erreur Supabase.");
+  const rows = await res.json();
+  return rows[0] ?? null; // null si introuvable
+}
 
-  if (!token) {
-    return res.status(400).json({ valid: false, reason: "Token manquant." });
+/* ---------- Handler principal ---------- */
+export default async function handler(req, res) {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ valid: false, reason: "Identifiant manquant." });
   }
 
-  let payload;
+  // 1. Chercher le token dans Supabase
+  let row;
   try {
-    payload = decrypt(token);
+    row = await supabaseGet(id);
   } catch {
-    // Échec du déchiffrement = token falsifié ou clé incorrecte
-    return res.status(403).json({ valid: false, reason: "Token invalide ou falsifié." });
+    return res.status(500).json({ valid: false, reason: "Erreur de connexion à la base de données." });
   }
 
-  // Vérification expiration
-  const expired = (Date.now() - payload.iat) > EXPIRY_MS;
-  if (expired) {
+  if (!row) {
+    return res.status(404).json({ valid: false, reason: "Lien introuvable." });
+  }
+
+  // 2. Vérifier l'expiration (double sécurité : Supabase + payload)
+  if (new Date(row.expires_at) < new Date()) {
     return res.status(200).json({ valid: false, expired: true, reason: "Lien expiré (30 jours)." });
   }
 
-  // ✅ Token valide — on renvoie le payload déchiffré pour que transfer.html puisse l'utiliser
-  return res.status(200).json({
-    valid: true,
-    expired: false,
-    payload, // { mt, n1, id1, n2, id2, e, f, iat }
-  });
+  // 3. Déchiffrer le token
+  let payload;
+  try {
+    payload = decrypt(row.token);
+  } catch {
+    return res.status(403).json({ valid: false, reason: "Token invalide ou falsifié." });
+  }
+
+  // 4. ✅ Tout est bon
+  return res.status(200).json({ valid: true, expired: false, payload });
 }
