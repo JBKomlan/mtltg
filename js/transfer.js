@@ -1,12 +1,12 @@
 /**
  * TransferLink v4.2 — transfer.js
- * Logique de la page Client : vérification + affichage des boutons de paiement
+ * Logique de la page Client : vérification via /api/verify (serveur) + affichage des boutons
+ *
+ * ✅  La clé secrète ne se trouve plus dans ce fichier ni dans le navigateur.
+ *    La vérification HMAC se fait entièrement côté serveur (Vercel).
  *
  * Dépend de : js/shared.js (chargé avant dans le HTML)
  */
-
-const CLE_ADMIN = "fd2026!tg"; // doit correspondre à index.js
-const EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; // 30 jours
 
 const COPY_ICON = `<svg viewBox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>`;
 const OK_ICON   = `<svg viewBox="0 0 24 24" fill="#28a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
@@ -14,7 +14,7 @@ const OK_ICON   = `<svg viewBox="0 0 24 24" fill="#28a745"><path d="M9 16.17L4.8
 document.addEventListener("DOMContentLoaded", async () => {
   const app = document.getElementById("app");
 
-  // 1. Charger config
+  // 1. Charger config.json
   try {
     await initConfig();
   } catch {
@@ -23,39 +23,51 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 2. Lire les paramètres d'URL
-  const url = new URLSearchParams(window.location.search);
+  const qs = new URLSearchParams(window.location.search);
   const p = {
-    mt:  url.get("mt"),
-    n1:  url.get("n1")  ?? "",
-    id1: url.get("id1") ?? "",
-    n2:  url.get("n2")  ?? "",
-    id2: url.get("id2") ?? "",
-    e:   url.get("e"),
-    f:   url.get("f"),
-    d:   url.get("d"),
-    s:   url.get("s"),
+    mt:  qs.get("mt"),
+    n1:  qs.get("n1")  ?? "",
+    id1: qs.get("id1") ?? "",
+    n2:  qs.get("n2")  ?? "",
+    id2: qs.get("id2") ?? "",
+    e:   qs.get("e"),
+    f:   qs.get("f"),
+    d:   qs.get("d"),
+    s:   qs.get("s"),
   };
 
-  // 3. Vérification signature
-  const signatureValide = verifyClient(
-    [p.n1, p.n2, p.mt, p.e, p.f, p.d],
-    CLE_ADMIN,
-    p.s
-  );
-  const estExpire = (Date.now() - parseInt(p.d, 10)) > EXPIRY_MS;
-
-  if (!signatureValide || estExpire) {
-    app.innerHTML = erreurHTML("🚫 Lien invalide ou expiré.<br><small>Ce lien n'est plus certifié ou a dépassé sa période de validité de 30 jours.</small>");
+  // 3. Paramètres minimaux présents ?
+  if (!p.mt || !p.d || !p.s) {
+    app.innerHTML = erreurHTML("🚫 Lien invalide — paramètres manquants.");
     return;
   }
 
-  // 4. Injecter le contenu
+  // 4. ✅ Vérification via l'API serveur (la clé ne quitte jamais Vercel)
+  let verif;
+  try {
+    const apiRes = await fetch(
+      `/api/verify?${new URLSearchParams({ mt: p.mt, n1: p.n1, n2: p.n2, e: p.e, f: p.f, d: p.d, s: p.s }).toString()}`
+    );
+    verif = await apiRes.json();
+  } catch {
+    app.innerHTML = erreurHTML("⚠️ Impossible de vérifier le lien. Vérifiez votre connexion.");
+    return;
+  }
+
+  if (!verif.valid) {
+    const raison = verif.expired
+      ? "Ce lien a dépassé sa période de validité de 30 jours."
+      : "Ce lien n'est pas certifié ou a été modifié.";
+    app.innerHTML = erreurHTML(`🚫 Lien invalide ou expiré.<br><small>${raison}</small>`);
+    return;
+  }
+
+  // 5. Lien valide → afficher l'UI
   app.innerHTML = buildUI(p);
 
-  // 5. Événements
   const mtField = document.getElementById("mtField");
   mtField.addEventListener("input", () => drawButtons(p));
-  drawButtons(p); // premier rendu
+  drawButtons(p);
 });
 
 /* ---------- Construction de l'UI principale ---------- */
