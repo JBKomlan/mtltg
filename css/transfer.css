@@ -21,6 +21,9 @@ body {
   margin-bottom: 15px;
   border: 1px dashed #4299e1;
 }
+#mtField {
+   font-size: 36px;
+}
 
 /* ---------- Amount input ---------- */
 .amount-input {
