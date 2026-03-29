@@ -1,0 +1,123 @@
+/* ============================================================
+   TransferLink v4.2 — Shared Styles
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 10px;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* ---------- Logo ---------- */
+.logo-container { text-align: center; margin-bottom: 20px; }
+.logo-img       { width: 70px; height: auto; margin-bottom: 8px; display: block; margin-inline: auto; }
+.logo-text {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(45deg, #0056b3, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---------- Form elements ---------- */
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.12);
+}
+
+/* ---------- Phone input with prefix ---------- */
+.phone-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0 10px;
+  margin-top: 5px;
+  transition: border-color 0.2s;
+}
+.phone-input:focus-within {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.12);
+}
+.phone-input .prefix {
+  font-weight: 700;
+  color: #555;
+  white-space: nowrap;
+  margin-right: 8px;
+  font-size: 14px;
+}
+.phone-input input {
+  border: none !important;
+  box-shadow: none !important;
+  margin-top: 0;
+  padding: 12px 0;
+}
+
+/* ---------- Error hint ---------- */
+.error-hint {
+  color: #e53e3e;
+  font-size: 11px;
+  margin-top: 3px;
+  display: none;
+}
+
+/* ---------- Disclaimer ---------- */
+.disclaimer {
+  font-size: 10px;
+  color: #718096;
+  margin-top: 25px;
+  line-height: 1.4;
+  text-align: justify;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 12px;
+}
+
+/* ---------- Error state (transfer page) ---------- */
+.state-error {
+  color: #dc3545;
+  background: #fff5f5;
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid #feb2b2;
+  text-align: center;
+}
