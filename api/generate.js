@@ -1,5 +1,3 @@
-
-
 import crypto from "node:crypto";
 
 const ALGO      = "aes-256-gcm";
@@ -55,7 +53,7 @@ export default async function handler(req, res) {
   const {
     adminPass,
     mt, n1 = "", id1 = "", n2 = "", id2 = "",
-    e = "0", f = "0",
+    e = "0", f = "0", motif = "",
   } = req.query;
 
   // 1. Auth admin
@@ -69,7 +67,7 @@ export default async function handler(req, res) {
   }
 
   // 3. Payload → chiffrement
-  const payload = { mt, n1, id1, n2, id2, e, f, iat: Date.now() };
+  const payload = { mt, n1, id1, n2, id2, e, f, motif, iat: Date.now() };
   let token;
   try {
     token = encrypt(payload);
