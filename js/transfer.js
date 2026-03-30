@@ -53,6 +53,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 /* ---------- Construction de l'UI ---------- */
 function buildUI(p) {
   const readonlyAttr = p.e === "0" ? "readonly" : "";
+  const motifBlock = p.motif
+    ? `<div class="motif-box">📝 <b>Motif :</b> ${p.motif}</div>`
+    : "";
   return `
     <img src="https://raw.githubusercontent.com/JBKomlan/mtl/main/logomtl.png" alt="Logo TransferLink" class="logo-img">
     <span class="logo-text">★ TransferLink</span>
@@ -64,6 +67,8 @@ function buildUI(p) {
     <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
     <input type="number" id="mtField" class="amount-input"
            value="${p.mt}" min="${p.mt}" ${readonlyAttr}>
+
+    ${motifBlock}
 
     <div id="btns"></div>
 
