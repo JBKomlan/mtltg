@@ -91,3 +91,13 @@ body {
   transition: background 0.2s;
 }
 .wa-link:hover { background: #1ebe5d; }
+
+/* ---------- Champ motif ---------- */
+.motif-section {
+  margin-top: 15px;
+}
+.motif-section label {
+  color: #718096;
+  font-weight: 600;
+  font-size: 13px;
+}
