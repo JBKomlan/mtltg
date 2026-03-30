@@ -47,6 +47,7 @@ async function generer() {
   const id2        = document.getElementById("id2").value.trim();
   const isEditable = document.getElementById("allowEdit").checked ? "1" : "0";
   const hasFrais   = document.getElementById("addFrais").checked  ? "1" : "0";
+  const motif      = document.getElementById("motive").value.trim();
 
   // 2. Validations côté client (rapides, avant d'appeler le serveur)
   if (!adminPass) return alert("⚠️ Veuillez saisir le code de sécurité admin.");
@@ -72,11 +73,12 @@ async function generer() {
   try {
     const apiRes = await fetch(
       `/api/generate?${new URLSearchParams({
-        adminPass,          // le serveur vérifie le mot de passe via process.env.ADMIN_PASS
+        adminPass,
         mt: mtFinal,
         n1, id1, n2, id2,
         e: isEditable,
         f: hasFrais,
+        motif,
       }).toString()}`
     );
 
@@ -97,10 +99,12 @@ async function generer() {
 
   // 5. Construction du message WhatsApp
   const montantFormate = formatMontant(mtFinal);
+  const ligneMotif = motif ? `*Motif:* ${motif}\n` : "";
   const guideText =
     `\n*N°* *${n1}*  *${n2}*\n` +
     `*Id.* ${id1 || id2}\n` +
     `*Montant:* [ *${montantFormate}* ]\n` +
+    ligneMotif +
     `_______________________\n` +
     `_*Cliquez sur le lien pour finaliser votre transfert.*_`;
   const msg = lienFinal + "\n" + guideText;
