@@ -79,7 +79,7 @@ function buildUI(p) {
 
     <div class="disclaimer">
       <b>Disclaimer :</b> Vérifiez le montant, le numéro et l'identité du destinataire
-      avant toute validation finale. Nous déclinons toute responsabilité en cas d'erreur de saisie.
+      avant toute validation finale. Nous déclinons toute responsabilité en cas d'une manipulation erronée.
     </div>
 
     <div class="footer-copy">&copy; ${new Date().getFullYear()} <b>TransferLink</b>. Tous droits réservés.</div>
