@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const qs = new URLSearchParams(window.location.search);
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   const id = qs.get("id") || pathParts[pathParts.length - 1] || null;
-alert("id=" + id); // ← temporaire
   
   if (!id) {
     app.innerHTML = erreurHTML("🚫 Lien invalide — identifiant manquant.");
