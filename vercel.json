@@ -1,6 +1,5 @@
 {
-  "cleanUrls": true,
-  "routes": [
-    { "src": "/t/(?<id>[^/]+)", "dest": "/transfer.html?id=$id" }
+  "rewrites": [
+    { "source": "/t/(.*)", "destination": "/transfer.html?id=$1" }
   ]
 }
