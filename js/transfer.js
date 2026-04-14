@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 2. Lire l'identifiant court dans l'URL
 
   const qs = new URLSearchParams(window.location.search);
-  const pathParts = window.location.pathname.split('/').filter(boolean);
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
   const id = qs.get("id") || pathParts[pathParts.length - 1] || null;
 alert("id=" + id); // ← temporaire
   
