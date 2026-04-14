@@ -72,6 +72,13 @@ body {
   transition: filter 0.2s, transform 0.1s;
   line-height: 1.3;
 }
+.btn-pay svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
 .btn-pay:active { transform: scale(0.97); filter: brightness(0.9); }
 
 .btn-pay.tmoney { background: #007bff; }
