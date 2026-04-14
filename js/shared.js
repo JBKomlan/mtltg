@@ -7,7 +7,7 @@ let CONFIG = null;
  */
 async function initConfig() {
   if (CONFIG) return CONFIG;
-  const res = await fetch("config.json");
+  const res = await fetch("/config.json");
   if (!res.ok) throw new Error("Impossible de charger config.json");
   CONFIG = await res.json();
   return CONFIG;
