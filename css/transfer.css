@@ -72,6 +72,12 @@ body {
   transition: filter 0.2s, transform 0.1s;
   line-height: 1.3;
 }
+.phone-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
 .btn-pay svg {
   width: 20px;
   height: 20px;
