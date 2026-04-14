@@ -20,11 +20,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const pathParts = window.location.pathname.split('/');
   const id = qs.get("id") || pathParts[pathParts.length - 1] || null;
 
-  // Debug temporaire — à supprimer après
-document.body.innerHTML = `
-  <p>pathname: ${window.location.pathname}</p>
-  <p>search: ${window.location.search}</p>
-  <p>id détecté: ${id}</p>`;
   
   if (!id) {
     app.innerHTML = erreurHTML("🚫 Lien invalide — identifiant manquant.");
