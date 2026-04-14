@@ -95,7 +95,7 @@ export default async function handler(req, res) {
   }
 
   // 5. URL courte finale
-  const baseUrl = process.env.BASE_URL ?? "https://mtl-tg.vercel.app";
+  const baseUrl = process.env.BASE_URL ?? "https://transferlink-tg.vercel.app";
   // const url = `${baseUrl}/transfer.html?id=${linkId}`;
   const url = `${baseUrl}/t/${linkId}`;
 
