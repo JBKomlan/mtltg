@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/t/:id", "destination": "/transfer.html?id=:id" }
+  ]
+}
