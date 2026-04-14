@@ -15,8 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 2. Lire l'identifiant court dans l'URL
+
   const qs = new URLSearchParams(window.location.search);
-  const id = qs.get("id");
+  const pathParts = window.location.pathname.split('/');
+  const id = qs.get("id") || pathParts[pathParts.length - 1] || null;
 
   if (!id) {
     app.innerHTML = erreurHTML("🚫 Lien invalide — identifiant manquant.");
