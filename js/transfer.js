@@ -67,10 +67,10 @@ function buildUI(p) {
       ℹ️ Après avoir cliqué, validez simplement l'appel sur votre téléphone.
     </div>
 
-    <div class="input-fcfa">
+    <div class="amt-currency">
     <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
     <input type="number" id="mtField" class="amount-input"
-           value="${p.mt}" min="${p.mt}" ${readonlyAttr}><span>FCFA</span>
+           value="${p.mt}" min="${p.mt}" ${readonlyAttr}>
     </div>
     
     ${motifBlock}
