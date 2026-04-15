@@ -69,7 +69,7 @@ function buildUI(p) {
 
     <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
     <input type="number" id="mtField" class="amount-input"
-           value="${p.mt}" min="${p.mt}" ${readonlyAttr}>
+           value="${p.mt}" min="${p.mt}" ${readonlyAttr}><span>FCFA</span>
 
     ${motifBlock}
 
