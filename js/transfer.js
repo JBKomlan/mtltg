@@ -92,7 +92,7 @@ function buildUI(p) {
       avant toute validation finale. Nous déclinons toute responsabilité en cas d'une manipulation erronée.
     </div>
 
-    <div class="footer-copy">&copy; ${new Date().getFullYear()} <b>TransferLink</b>. Tous droits réservés.</div>
+    <div class="footer-copy">&copy; ${new Date().getFullYear()} <b>Money TransferLink</b>. Tous droits réservés.</div>
   `;
 }
 
