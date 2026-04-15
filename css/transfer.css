@@ -53,6 +53,8 @@ body {
 /* assembler le montant et le symbole de la devise sur une même ligne */
 .input-fcfa {
   display: flex;
+  width: auto;
+  flex: 1;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
@@ -60,6 +62,7 @@ body {
 
 .input-fcfa label {
   width: 100%;
+  margin-bottom: 0;
 }
 
 .input-fcfa span {
