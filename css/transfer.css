@@ -86,8 +86,8 @@ body {
 }
 /* styles des logos des opérateurs */
 .operator-logo {
-   width: 24px;
-   height: 24px;
+   width: 35px;
+   height: 35px;
    object-fit: contain;
    border-radius: 4px;
    vertical-align: middle;
@@ -95,9 +95,10 @@ body {
 
 .btn-pay:active { transform: scale(0.97); filter: brightness(0.9); }
 
-.btn-pay.tmoney { background: #007bff; }
-.btn-pay.flooz  { background: #ffc107; color: #333; }
-
+/* .btn-pay.tmoney { background: #007bff; } */
+.btn-pay.tmoney { background: #00377d; } /* Bleu foncé pour Mixx */
+/* .btn-pay.flooz  { background: #ffc107; color: #333; } */
+.btn-pay.flooz  { background: #f26522; color: white; } /* Orange pour Flooz */
 /* ---------- Copy icon button ---------- */
 .btn-copy {
   display: none; /* shown by JS after click */
