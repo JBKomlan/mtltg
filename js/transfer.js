@@ -113,24 +113,28 @@ function drawButtons(p) {
   if (p.n1 && p.n1.length === 8) {
     const code  = `*145*1*${val}*${p.n1}*${suffixe}#`;
     const label = `🔵 MiXX → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
-    html += btnRow("t", "tmoney", code, label);
+    html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
   }
 
   if (p.n2 && p.n2.length === 8) {
     const code  = `*155*1*1*${p.n2}*${p.n2}*${val}*${suffixe}#`;
     const label = `🟡 FlOOZ → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
-    html += btnRow("m", "flooz", code, label);
+    html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
   }
 
   btnsEl.innerHTML = html;
 }
 
 /* ---------- Ligne bouton + icône copie ---------- */
-function btnRow(id, cls, code, label) {
+function btnRow(id, cls, code, label, logoUrl) {
   const telHref = "tel:" + code.replace(/#/g, "%23");
   return `
     <div class="btn-container">
-      <a href="${telHref}" class="btn-pay ${cls}" onclick="showCopy('${id}')">${PHONE_ICON} ${label}</a>
+      <a href="${telHref}" class="btn-pay ${cls}" onclick="showCopy('${id}')">
+        ${PHONE_ICON} 
+        <img src="${logoUrl}" class="operator-logo" alt="Mixx By Yas Togo">
+        ${label}
+      </a>
       <button id="cp-${id}" class="btn-copy" onclick="copyToClipboard(this, '${code}')" title="Copier le code USSD">
         ${COPY_ICON}
       </button>
