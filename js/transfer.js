@@ -112,13 +112,13 @@ function drawButtons(p) {
 
   if (p.n1 && p.n1.length === 8) {
     const code  = `*145*1*${val}*${p.n1}*${suffixe}#`;
-    const label = `🔵 MiXX → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
+    const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
     html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
   }
 
   if (p.n2 && p.n2.length === 8) {
     const code  = `*155*1*1*${p.n2}*${p.n2}*${val}*${suffixe}#`;
-    const label = `🟡 FlOOZ → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
+    const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
     html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
   }
 
