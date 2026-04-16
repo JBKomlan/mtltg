@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch(`/api/verify?id=${encodeURIComponent(id)}`);
     verif = await res.json();
   } catch {
-    app.innerHTML = erreurHTML("⚠️ Impossible de vérifier le lien. Vérifiez votre connexion.");
+    app.innerHTML = erreurHTML("⚠️ Impossible de charger le lien. Vérifiez votre connexion.");
     return;
   }
 
@@ -60,13 +60,12 @@ function buildUI(p) {
     ? `<div class="motif-box">📝 <b>Motif :</b> ${p.motif}</div>`
     : "";
   return `
-    <img src="https://raw.githubusercontent.com/JBKomlan/mtl/main/logomtl.png" alt="Logo TransferLink" class="logo-img">
-    <span class="logo-text">★ TransferLink</span>
+    <img src="/img/mtl.png" alt="Money-TransferLink" class="logo-img">
+    <span class="logo-text">*****</span>
 
     <div class="reassurance">
       ℹ️ Après avoir cliqué, validez simplement l'appel sur votre téléphone.
     </div>
-
     <div class="amt-currency">
     <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
     <input type="number" id="mtField" class="amount-input"
@@ -84,7 +83,7 @@ function buildUI(p) {
 
     <a href="https://wa.me/22898390629?text=${encodeURIComponent("Salut, Je viens de découvrir TransferLink. J'aimerais en savoir plus pour booster mon business en ligne.")}"
        target="_blank" rel="noopener" class="btn-wa-promo">
-      🟢 Obtenir mon propre lien TransferLink
+      🟢 Obtenir un lien "Money TransferLink"
     </a>
 
     <div class="disclaimer">
