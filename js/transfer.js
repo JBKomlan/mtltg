@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mtField = document.getElementById("mtField");
   if (mtField) {
     mtField.addEventListener("input", () => {
-  mtField.value = mtField.value.replace(/[.,]/g, "");
+    mtField.value = mtField.value.replace(/[.,]/g, "");
   drawButtons(p);
   });
      
