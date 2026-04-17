@@ -56,8 +56,8 @@ body {
 }
 .amount-input:focus {
   outline: none;
-  border-color: #003d8a;
-  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15); 
+  /* border-color: #003d8a;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15); */
 }
 .input-fcfa {
   display: flex;
