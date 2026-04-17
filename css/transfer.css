@@ -57,7 +57,7 @@ body {
 .amount-input:focus {
   outline: none;
   border-color: #003d8a;
-  /* box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15); */
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15); 
 }
 .input-fcfa {
   display: flex;
@@ -65,7 +65,7 @@ body {
   gap: 8px;
   width: 100%;
   border: 2px solid #0056b3;
-  border-radius: 12px;
+  /* border-radius: 12px; */
   padding: 0 12px;
   margin: 15px 0;
 }
