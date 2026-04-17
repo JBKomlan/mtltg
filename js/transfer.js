@@ -48,14 +48,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mtField = document.getElementById("mtField");
   if (mtField) {
     mtField.addEventListener("input", () => {
-    mtField.value = mtField.value.replace(/[.,]/g, "");
-  drawButtons(p);
-  });
-     
-};
+      mtField.value = mtField.value.replace(/[.,]/g, "");
+      drawButtons(p);
+    });
+    mtField.focus();
+    const len = mtField.value.length;
+    mtField.setSelectionRange(len, len);
   }
   drawButtons(p);
-
+});
 
 /* ---------- Construction de l'UI ---------- */
 function buildUI(p) {
