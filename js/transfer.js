@@ -48,10 +48,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mtField = document.getElementById("mtField");
   if (mtField) {
     mtField.addEventListener("input", () => drawButtons(p));
-    // Positionner le curseur à la fin
-    mtField.focus();
-    const len = mtField.value.length;
-    mtField.setSelectionRange(len, len);
   }
   drawButtons(p);
 });
