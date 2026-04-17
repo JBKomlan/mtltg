@@ -45,10 +45,7 @@ body {
   font-size: 26px;
   font-weight: 700;
   text-align: center;
-  border: 2px solid #0056b3;
-  border-radius: 12px;
   padding: 10px;
-  margin: 15px 0;
   transition: border-color 0.2s;
 }
 .amount-input[readonly] {
@@ -67,14 +64,26 @@ body {
   align-items: center;
   gap: 8px;
   width: 100%;
+  border: 2px solid #0056b3;
+  border-radius: 12px;
+  padding: 0 12px;
+  margin: 15px 0;
 }
-
+.input-fcfa input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 0;
+  background: transparent;
+}
 .input-fcfa span {
   font-size: 14px;
   font-weight: 600;
   color: #4a5568;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 /* ---------- Payment button row ---------- */
 .btn-container {
