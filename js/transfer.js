@@ -62,7 +62,7 @@ function buildUI(p) {
   const montantBlock = p.e === "0"
     ? `<div class="amount-display">${formatMontant(p.mt)}</div>`
     : `<div class="input-fcfa">
-         <input type="number" id="mtField" class="amount-input" value="${p.mt}" min="${p.mt}">
+         <input type="number" id="mtField" class="amount-input" value="${p.mt}" min="${p.mt}" autofocus>
          <span>FCFA</span>
        </div>`;
 
