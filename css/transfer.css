@@ -25,6 +25,19 @@ body {
    font-size: 36px;
 }
 
+.amount-display {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d3748;
+  text-align: center;
+  padding: 16px;
+  border: 2px solid #cbd5e0;
+  border-radius: 12px;
+  background: #f8f9fa;
+  margin: 15px 0;
+  letter-spacing: 1px;
+}
+
 /* ---------- Amount input ---------- */
 .amount-input {
   width: 100%;
