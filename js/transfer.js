@@ -72,10 +72,10 @@ function buildUI(p) {
     <div class="reassurance">
       ℹ️ Après avoir cliqué, validez simplement l'appel sur votre téléphone.
     </div>
-    <div class="amt-currency">
-       <label style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
+  
+    <label style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
    ${montantBlock}
-    </div>
+  
     
     ${motifBlock}
 
