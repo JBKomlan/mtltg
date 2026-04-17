@@ -1,8 +1,6 @@
-
 const COPY_ICON = `<svg viewBox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>`;
 const OK_ICON   = `<svg viewBox="0 0 24 24" fill="#28a745"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>`;
 const PHONE_ICON = `<svg class="phone-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/><path d="M17 1v2c2.8 0 5 2.2 5 5h2c0-3.9-3.1-7-7-7zm0 4v2c.6 0 1 .4 1 1h2c0-1.7-1.3-3-3-3z"/></svg>`;
-// const PHONE_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>`; // téléphone simple
 
 document.addEventListener("DOMContentLoaded", async () => {
   const app = document.getElementById("app");
@@ -16,17 +14,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // 2. Lire l'identifiant court dans l'URL
-
   const qs = new URLSearchParams(window.location.search);
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   const id = qs.get("id") || pathParts[pathParts.length - 1] || null;
-  
+
   if (!id) {
     app.innerHTML = erreurHTML("🚫 Lien invalide — identifiant manquant.");
     return;
   }
 
-  // 3. ✅ Vérification côté serveur : Supabase → déchiffrement → payload
+  // 3. Vérification côté serveur : Supabase → déchiffrement → payload
   let verif;
   try {
     const res = await fetch(`/api/verify?id=${encodeURIComponent(id)}`);
@@ -44,33 +41,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 4. ✅ Payload déchiffré disponible — afficher l'interface
+  // 4. Payload déchiffré disponible — afficher l'interface
   const p = verif.payload; // { mt, n1, id1, n2, id2, e, f, iat }
   app.innerHTML = buildUI(p);
 
   const mtField = document.getElementById("mtField");
-if (mtField) {
-  mtField.addEventListener("input", () => drawButtons(p));
-}
-drawButtons(p);
-
-  const mtField = document.getElementById("mtField");
-  mtField.addEventListener("input", () => drawButtons(p));
+  if (mtField) {
+    mtField.addEventListener("input", () => drawButtons(p));
+  }
   drawButtons(p);
 });
 
 /* ---------- Construction de l'UI ---------- */
 function buildUI(p) {
-  // const readonlyAttr = p.e === "0" ? "readonly" : "";
   const motifBlock = p.motif
     ? `<div class="motif-box">📝 <b>Motif :</b> ${p.motif}</div>`
     : "";
+
+  // Montant : formaté en lecture seule, ou input éditable
   const montantBlock = p.e === "0"
-  ? `<div class="amount-display">${formatMontant(p.mt)}</div>`
-  : `<div class="input-fcfa">
-       <input type="number" id="mtField" class="amount-input" value="${p.mt}" min="${p.mt}">
-       <span>FCFA</span>
-     </div>`;
+    ? `<div class="amount-display">${formatMontant(p.mt)}</div>`
+    : `<div class="input-fcfa">
+         <input type="number" id="mtField" class="amount-input" value="${p.mt}" min="${p.mt}">
+         <span>FCFA</span>
+       </div>`;
+
   return `
     <img src="/img/mtl.png" alt="Money-TransferLink" class="logo-img">
     <span class="logo-text">*****</span>
@@ -78,11 +73,10 @@ function buildUI(p) {
     <div class="reassurance">
       ℹ️ Après avoir cliqué, validez simplement l'appel sur votre téléphone.
     </div>
-  
+
     <label style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
-   ${montantBlock}
-  
-    
+    ${montantBlock}
+
     ${motifBlock}
 
     <div id="btns"></div>
@@ -109,7 +103,8 @@ function buildUI(p) {
 /* ---------- Rendu des boutons USSD ---------- */
 function drawButtons(p) {
   const btnsEl      = document.getElementById("btns");
-  const val         = parseFloat(document.getElementById("mtField").value) || 0;
+  const mtField     = document.getElementById("mtField");
+  const val         = mtField ? parseFloat(mtField.value) || 0 : parseFloat(p.mt) || 0;
   const minAutorise = parseFloat(p.mt) || 0;
   const suffixe     = p.f === "1" ? "2" : "1";
 
@@ -141,8 +136,8 @@ function btnRow(id, cls, code, label, logoUrl) {
   return `
     <div class="btn-container">
       <a href="${telHref}" class="btn-pay ${cls}" onclick="showCopy('${id}')">
-        ${PHONE_ICON} 
-        <img src="${logoUrl}" class="operator-logo" alt="Mixx By Yas Togo">
+        ${PHONE_ICON}
+        <img src="${logoUrl}" class="operator-logo" alt="">
         ${label}
       </a>
       <button id="cp-${id}" class="btn-copy" onclick="copyToClipboard(this, '${code}')" title="Copier le code USSD">
