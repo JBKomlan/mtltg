@@ -49,6 +49,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   app.innerHTML = buildUI(p);
 
   const mtField = document.getElementById("mtField");
+if (mtField) {
+  mtField.addEventListener("input", () => drawButtons(p));
+}
+drawButtons(p);
+
+  const mtField = document.getElementById("mtField");
   mtField.addEventListener("input", () => drawButtons(p));
   drawButtons(p);
 });
