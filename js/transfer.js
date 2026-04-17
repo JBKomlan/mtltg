@@ -55,10 +55,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /* ---------- Construction de l'UI ---------- */
 function buildUI(p) {
-  const readonlyAttr = p.e === "0" ? "readonly" : "";
+  // const readonlyAttr = p.e === "0" ? "readonly" : "";
   const motifBlock = p.motif
     ? `<div class="motif-box">📝 <b>Motif :</b> ${p.motif}</div>`
     : "";
+  const montantBlock = p.e === "0"
+  ? `<div class="amount-display">${formatMontant(p.mt)}</div>`
+  : `<div class="input-fcfa">
+       <input type="number" id="mtField" class="amount-input" value="${p.mt}" min="${p.mt}">
+       <span>FCFA</span>
+     </div>`;
   return `
     <img src="/img/mtl.png" alt="Money-TransferLink" class="logo-img">
     <span class="logo-text">*****</span>
@@ -67,9 +73,12 @@ function buildUI(p) {
       ℹ️ Après avoir cliqué, validez simplement l'appel sur votre téléphone.
     </div>
     <div class="amt-currency">
-    <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
+    /* .... <label for="mtField" style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
     <input type="number" id="mtField" class="amount-input"
            value="${p.mt}" min="${p.mt}" ${readonlyAttr}>
+    ..... */
+       <label style="font-size:12px; color:#718096;">Montant à régler (FCFA) :</label>
+${montantBlock}
     </div>
     
     ${motifBlock}
