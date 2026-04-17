@@ -47,9 +47,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const mtField = document.getElementById("mtField");
   if (mtField) {
-    mtField.addEventListener("input", () => drawButtons(p));
-    mtField.addEventListener("keydown", (e) => {
-      if (e.key === "." || e.key === "," ) e.preventDefault();
+    mtField.addEventListener("input", () => {
+  mtField.value = mtField.value.replace(/[.,]/g, "");
+  drawButtons(p);
+  });
+     
 });
   }
   drawButtons(p);
