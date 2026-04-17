@@ -51,10 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       mtField.value = mtField.value.replace(/[.,]/g, "");
       drawButtons(p);
     });
-    mtField.focus();
-    const len = mtField.value.length;
-    mtField.setSelectionRange(len, len);
-  drawButtons(p);
+    
   }
   drawButtons(p);
 });
