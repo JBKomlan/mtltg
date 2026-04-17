@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     mtField.focus();
     const len = mtField.value.length;
     mtField.setSelectionRange(len, len);
-    drawButtons(p);
+  drawButtons(p);
   }
   drawButtons(p);
 });
