@@ -52,10 +52,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   drawButtons(p);
   });
      
-});
+};
   }
   drawButtons(p);
-});
+
 
 /* ---------- Construction de l'UI ---------- */
 function buildUI(p) {
