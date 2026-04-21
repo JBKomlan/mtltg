@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TransferLink — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="/img/mtl.png" alt="Money TransferLink" class="logo-img">
+    <span class="logo-text">TransferLink ★</span>
+  </div>
+
+  <!-- Auth -->
+  <div class="auth-zone">
+    <label for="adminPass">🔑 Code de Sécurité Admin</label>
+    <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
+  </div>
+
+  <!-- Client -->
+  <label for="numClient">📞 WhatsApp Client <span class="label-hint">(numéro complet avec indicatif)</span></label>
+  <input type="tel" id="numClient" placeholder="Ex : 22890000000" inputmode="numeric">
+
+  <!-- SECTION 1 — Type de transaction -->
+  <div class="config-section">
+    <div class="section-header">
+      <span class="section-icon">🔄</span>
+      <span class="section-title">Type de transaction</span>
+    </div>
+    <div class="radio-group" id="transactionTypeGroup">
+      <label class="radio-card active" id="rc-simple">
+        <input type="radio" name="transactionType" value="transfert" checked>
+        <span class="radio-icon">📤</span>
+        <span class="radio-label">Transfert simple</span>
+      </label>
+      <label class="radio-card" id="rc-marchand">
+        <input type="radio" name="transactionType" value="marchand">
+        <span class="radio-icon">🏪</span>
+        <span class="radio-label">Paiement marchand</span>
+      </label>
+    </div>
+    <div class="marchand-zone" id="marchandZone" style="display:none;">
+      <div class="marchand-notice">
+        <span>ℹ️</span>
+        <span>Les codes USSD marchand seront configurés dans cette zone.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 — Montant -->
+  <div class="config-section">
+    <div class="section-header">
+      <span class="section-icon">💰</span>
+      <span class="section-title">Montant</span>
+    </div>
+
+    <label for="montant">Montant initial (FCFA)</label>
+    <input type="number" id="montant" placeholder="Ex : 5000" min="100" max="505000">
+
+    <div class="options-zone">
+      <label>
+        <input type="checkbox" id="allowEdit"> ✏️ Modifiable
+      </label>
+      <label>
+        <input type="checkbox" id="addFrais"> 📈 Frais 1 %
+      </label>
+    </div>
+
+    <!-- Fourchette de montants -->
+    <div class="toggle-block">
+      <div class="toggle-header" id="rangeToggleBtn">
+        <span>📏 Fourchette de montants autorisés</span>
+        <span class="toggle-arrow" id="rangeArrow">▼</span>
+      </div>
+      <div class="toggle-body" id="rangeBody" style="display:none;">
+        <div class="range-row">
+          <div class="range-field">
+            <label for="minMontant">Min (FCFA)</label>
+            <input type="number" id="minMontant" placeholder="100" min="100" max="505000">
+          </div>
+          <div class="range-sep">—</div>
+          <div class="range-field">
+            <label for="maxMontant">Max (FCFA)</label>
+            <input type="number" id="maxMontant" placeholder="200000" min="100" max="505000">
+          </div>
+        </div>
+        <p class="range-hint">Plage autorisée : 100 FCFA — 505 000 FCFA</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 — Bénéficiaires -->
+  <div class="config-section">
+    <div class="section-header">
+      <span class="section-icon">👤</span>
+      <span class="section-title">Bénéficiaires</span>
+    </div>
+
+    <div class="net-section tmoney">
+      <label>🔵 Mixx by Yas <span class="label-hint">(90 / 91 / 92 / 93 / 70 / 71 / 72)</span></label>
+      <div class="phone-input">
+        <span class="prefix">+228</span>
+        <input type="tel" id="n1" placeholder="90123456" inputmode="numeric" maxlength="8">
+      </div>
+      <span class="error-hint" id="hint-n1"></span>
+      <input type="text" id="id1" placeholder="Nom du bénéficiaire (optionnel)">
+    </div>
+
+    <div class="net-section flooz">
+      <label>🟡 Moov Money Flooz <span class="label-hint">(79 / 96 / 97 / 98 / 99)</span></label>
+      <div class="phone-input">
+        <span class="prefix">+228</span>
+        <input type="tel" id="n2" placeholder="96123456" inputmode="numeric" maxlength="8">
+      </div>
+      <span class="error-hint" id="hint-n2"></span>
+      <input type="text" id="id2" placeholder="Nom du bénéficiaire (optionnel)">
+    </div>
+  </div>
+
+  <!-- SECTION 4 — Nature du lien -->
+  <div class="config-section">
+    <div class="section-header">
+      <span class="section-icon">🏷️</span>
+      <span class="section-title">Nature du lien</span>
+    </div>
+    <div class="radio-group" id="linkNatureGroup">
+      <label class="radio-card active" id="rc-general">
+        <input type="radio" name="linkNature" value="general" checked>
+        <span class="radio-icon">🔗</span>
+        <span class="radio-label">Lien généraliste</span>
+      </label>
+      <label class="radio-card" id="rc-promo">
+        <input type="radio" name="linkNature" value="promo">
+        <span class="radio-icon">🎯</span>
+        <span class="radio-label">Promotion / Service</span>
+      </label>
+    </div>
+    <div id="promoDetailsZone" style="display:none; margin-top:12px;">
+      <label for="promoLabel">Nom du produit / service</label>
+      <input type="text" id="promoLabel" placeholder="Ex : Offre Ramadan, Pack Internet 10Go…">
+      <label for="promoDescription">Description courte <span class="label-hint">(optionnel)</span></label>
+      <input type="text" id="promoDescription" placeholder="Ex : Valable jusqu'au 30 avril 2025">
+    </div>
+  </div>
+
+  <!-- SECTION 5 — Motif du transfert -->
+  <div class="config-section">
+    <div class="section-header">
+      <span class="section-icon">📝</span>
+      <span class="section-title">Motif <span class="optional-badge">optionnel</span></span>
+    </div>
+    <input type="text" id="motive" placeholder="Ex : Paiement commande #42, Remboursement…">
+  </div>
+
+  <!-- SECTION 6 — Expiration du lien -->
+  <div class="config-section">
+    <div class="section-header">
+      <span class="section-icon">⏳</span>
+      <span class="section-title">Expiration du lien</span>
+    </div>
+
+    <label for="expiryDays">Durée de validité</label>
+    <div class="expiry-input-row">
+      <input type="number" id="expiryDays" value="30" min="1" max="365" placeholder="30">
+      <span class="expiry-unit">jours</span>
+      <span class="expiry-preview" id="expiryPreview"></span>
+    </div>
+
+    <div class="switch-row">
+      <label class="switch-label">
+        <input type="checkbox" id="showExpiry" class="switch-input">
+        <span class="switch-track"></span>
+        <span class="switch-text">Afficher la date d'expiration sur la page de transfert</span>
+      </label>
+      <p class="switch-hint">Le destinataire verra la date limite de validité du lien.</p>
+    </div>
+  </div>
+
+  <!-- Bouton -->
+  <button class="btn-generate" id="btn-generer">Générer le lien sécurisé</button>
+
+  <!-- Résultat -->
+  <div id="result">
+    <p id="resume"></p>
+    <div id="waArea"></div>
+  </div>
+
+  <div class="disclaimer">
+    <b>Disclaimer :</b> Vérifiez scrupuleusement les informations avant de générer le lien.
+    Les préfixes sont validés selon les normes Togo Cellulaire (Mixx by Yas) et Moov Money.
+  </div>
+
+</div>
+
+<script src="js/shared.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
