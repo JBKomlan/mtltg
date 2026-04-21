@@ -1,0 +1,366 @@
+/* ============================================================
+   TransferLink v4.3 — Admin page (index.html)
+   ============================================================ */
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px 10px 40px;
+}
+
+/* ---------- Auth zone ---------- */
+.auth-zone {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Label hints ---------- */
+.label-hint {
+  font-weight: 400;
+  color: #a0aec0;
+  font-size: 11px;
+}
+
+/* ---------- Config sections ---------- */
+.config-section {
+  border: 1px solid #e8edf4;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 14px;
+  background: #fafbfd;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.section-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.optional-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: #a0aec0;
+  background: #edf2f7;
+  border-radius: 4px;
+  padding: 1px 5px;
+  vertical-align: middle;
+}
+
+/* ---------- Radio cards ---------- */
+.radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.radio-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 8px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+  background: #fff;
+  text-align: center;
+}
+
+.radio-card input[type="radio"] {
+  display: none;
+}
+
+.radio-card.active,
+.radio-card:has(input:checked) {
+  border-color: #0056b3;
+  background: #ebf4ff;
+}
+
+.radio-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.radio-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+/* ---------- Marchand zone ---------- */
+.marchand-zone {
+  margin-top: 10px;
+}
+
+.marchand-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  color: #718096;
+  background: #fffbeb;
+  border: 1px dashed #f6d860;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* ---------- Options (checkboxes) ---------- */
+.options-zone {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0;
+  background: #edf2f7;
+  padding: 10px 12px;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.options-zone label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 0;
+  font-weight: 500;
+}
+
+.options-zone input[type="checkbox"] {
+  width: auto;
+}
+
+/* ---------- Toggle block (fourchette) ---------- */
+.toggle-block {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.toggle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  background: #f7f9fc;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.toggle-header:hover {
+  background: #edf2f7;
+}
+
+.toggle-arrow {
+  font-size: 10px;
+  color: #a0aec0;
+  transition: transform 0.2s;
+}
+
+.toggle-arrow.open {
+  transform: rotate(180deg);
+}
+
+.toggle-body {
+  padding: 12px;
+  border-top: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.range-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.range-field {
+  flex: 1;
+}
+
+.range-sep {
+  font-size: 16px;
+  color: #a0aec0;
+  padding-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.range-hint {
+  font-size: 10px;
+  color: #a0aec0;
+  margin: 6px 0 0;
+}
+
+/* ---------- Network section ---------- */
+.net-section {
+  border-left: 4px solid #cbd5e0;
+  padding: 12px 14px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  border-left-width: 4px;
+}
+
+.net-section.tmoney { border-left-color: #007bff; }
+.net-section.flooz  { border-left-color: #ffc107; }
+
+/* ---------- Expiration ---------- */
+.expiry-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.expiry-input-row input {
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.expiry-unit {
+  font-size: 13px;
+  color: #718096;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.expiry-preview {
+  font-size: 11px;
+  color: #0056b3;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- Toggle switch ---------- */
+.switch-row {
+  margin-top: 14px;
+}
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 0;
+}
+
+.switch-input {
+  display: none;
+}
+
+.switch-track {
+  width: 38px;
+  height: 21px;
+  background: #cbd5e0;
+  border-radius: 20px;
+  flex-shrink: 0;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.switch-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: left 0.2s;
+}
+
+.switch-input:checked + .switch-track {
+  background: #0056b3;
+}
+
+.switch-input:checked + .switch-track::after {
+  left: 20px;
+}
+
+.switch-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  line-height: 1.4;
+}
+
+.switch-hint {
+  font-size: 10px;
+  color: #a0aec0;
+  margin: 4px 0 0 48px;
+}
+
+/* ---------- Generate button ---------- */
+.btn-generate {
+  display: block;
+  width: 100%;
+  background: #2d3748;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 10px;
+  transition: background 0.25s, transform 0.1s;
+  letter-spacing: 0.3px;
+}
+
+.btn-generate:hover  { background: #1a202c; }
+.btn-generate:active { background: #111827; transform: scale(0.99); }
+.btn-generate:disabled { background: #a0aec0; cursor: not-allowed; }
+
+/* ---------- Result area ---------- */
+#result {
+  display: none;
+  margin-top: 20px;
+  padding: 16px;
+  background: #f0fff4;
+  border: 1px solid #c6f6d5;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#result p { font-weight: 700; margin: 0 0 10px; }
+
+.wa-link {
+  display: inline-block;
+  background: #25D366;
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 700;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.wa-link:hover { background: #1ebe5d; }
