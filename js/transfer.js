@@ -161,7 +161,7 @@ function buildUI(p) {
   const fraisBlock = `
     <label class="frais-option${isFraisInit ? " active" : ""}" id="fraisRow">
       <input type="checkbox" id="fraisChk"${isFraisInit ? " checked" : ""}>
-      📈 Inclure les frais de service (1 %)
+      📈 Supporter Partiellement les Frais de Retrait (1 %)
     </label>`;
 
   /* ── Motif ── */
