@@ -175,7 +175,7 @@ body {
 .frais-option {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
   margin: 4px 0 12px;
   padding: 8px 12px;
