@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TransferLink — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & BASE ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0b0d11;
+  --surface:   #13161d;
+  --surface2:  #1a1e28;
+  --border:    #232736;
+  --border2:   #2e3348;
+  --text:      #e2e5ef;
+  --muted:     #5c6480;
+  --muted2:    #8892b0;
+  --accent:    #4a9eff;
+  --accent-dim:#1a3d6e;
+  --green:     #1fd6a0;
+  --green-dim: #0a3325;
+  --warn:      #f0a340;
+  --warn-dim:  #3a2610;
+  --danger:    #ef5050;
+  --mixx:      #2979ff;
+  --mixx-bg:   #0d1f4a;
+  --flooz:     #f5a623;
+  --flooz-bg:  #3a2400;
+  --r:         14px;
+  --r-sm:      9px;
+  --shadow:    0 8px 32px rgba(0,0,0,.45);
+}
+
+html { font-size: 15px; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 14px 60px;
+  background-image:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(74,158,255,.07) 0%, transparent 70%);
+}
+
+/* ─── HEADER ───────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 28px;
+  animation: fadeDown .5s ease both;
+}
+.logo-img {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  object-fit: contain;
+  background: var(--surface2);
+  padding: 4px;
+}
+.logo-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.5px;
+}
+.logo-text em { color: var(--accent); font-style: normal; }
+
+/* ─── CARD ─────────────────────────────────────── */
+.card {
+  width: 100%;
+  max-width: 490px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: fadeUp .45s ease both .05s;
+}
+
+/* ─── STEPPER HEADER ───────────────────────────── */
+.stepper {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  background: var(--surface2);
+}
+.stepper::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  width: var(--prog, 25%);
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+}
+.s-btn {
+  flex: 1;
+  padding: 13px 4px 11px;
+  background: none;
+  border: none;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: background .15s;
+}
+.s-btn.clickable { cursor: pointer; }
+.s-btn.clickable:hover { background: rgba(255,255,255,.03); }
+.s-dot {
+  width: 25px; height: 25px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: all .3s;
+}
+.s-btn.active .s-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(74,158,255,.18);
+}
+.s-btn.done .s-dot {
+  border-color: var(--green);
+  background: var(--green);
+  color: #0b0d11;
+}
+.s-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+.s-btn.active .s-label { color: var(--accent); }
+.s-btn.done  .s-label { color: var(--green); }
+
+/* ─── STEP COUNTER PILL ────────────────────────── */
+.step-pill {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 20px 0;
+}
+.step-pill span {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 9px;
+  border-radius: 99px;
+}
+
+/* ─── PANELS ───────────────────────────────────── */
+.panel {
+  display: none;
+  padding: 22px 22px 4px;
+  animation: fadeIn .28s ease both;
+}
+.panel.active { display: block; }
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.panel-sub {
+  font-size: 12px;
+  color: var(--muted2);
+  margin-bottom: 20px;
+  line-height: 1.55;
+}
+
+/* ─── FORM ELEMENTS ────────────────────────────── */
+.field { margin-bottom: 16px; }
+label, .field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.label-hint {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+input[type=text],
+input[type=password],
+input[type=number],
+input[type=tel],
+select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 10px 13px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(74,158,255,.12);
+}
+input.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,80,80,.12);
+}
+input::placeholder { color: var(--muted); }
+
+.error-hint {
+  display: block;
+  font-size: 11px;
+  color: var(--danger);
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+/* ─── PHONE INPUT ──────────────────────────────── */
+.phone-wrap {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.prefix {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  padding: 10px 11px;
+  font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  color: var(--muted2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.phone-wrap input { flex: 1; }
+
+/* ─── RADIO CARDS ──────────────────────────────── */
+.radio-cards {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 16px;
+}
+.radio-card { flex: 1; cursor: pointer; }
+.radio-card input { display: none; }
+.radio-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 13px 8px;
+  background: var(--bg);
+  border: 1.5px solid var(--border2);
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--muted2);
+  transition: all .2s;
+}
+.radio-face .icon { font-size: 19px; }
+.radio-card input:checked + .radio-face {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* ─── OPERATOR ROWS ────────────────────────────── */
+.op-row {
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.op-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 13px;
+  background: var(--surface2);
+}
+.op-badge {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.op-badge.mixx { background: var(--mixx-bg); }
+.op-badge.flooz { background: var(--flooz-bg); }
+.op-name { font-size: 12px; font-weight: 600; }
+.op-hint { font-size: 10px; color: var(--muted); }
+.op-body { padding: 10px 13px 13px; background: var(--bg); display: flex; flex-direction: column; gap: 8px; }
+
+/* ─── CHECKBOXES ───────────────────────────────── */
+.check-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.check-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted2);
+  transition: all .2s;
+  user-select: none;
+}
+.check-pill input { display: none; }
+.check-pill.on {
+  border-color: var(--green);
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+/* ─── COLLAPSIBLE ──────────────────────────────── */
+.collapsible {
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.collapsible-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 13px;
+  background: var(--surface2);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted2);
+  user-select: none;
+}
+.collapsible-head:hover { background: var(--border); }
+.caret { transition: transform .25s; font-style: normal; font-size: 10px; }
+.caret.open { transform: rotate(180deg); }
+.collapsible-body {
+  display: none;
+  padding: 12px 13px;
+  background: var(--bg);
+}
+.collapsible-body.open { display: block; }
+.range-row { display: flex; gap: 8px; align-items: center; }
+.range-row input { flex: 1; }
+.range-sep { color: var(--muted); font-size: 13px; }
+.range-hint { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center; }
+
+/* ─── FEES DISPLAY ─────────────────────────────── */
+.fees-row {
+  display: none;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-sm);
+  padding: 11px 14px;
+  margin-top: -6px;
+  margin-bottom: 14px;
+  gap: 0;
+}
+.fees-row.show { display: flex; justify-content: space-between; }
+.fee-item { text-align: center; }
+.fee-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+.fee-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.fee-val.warn  { color: var(--warn); }
+.fee-val.green { color: var(--green); }
+
+/* ─── EXPIRY ROW ───────────────────────────────── */
+.expiry-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.expiry-row input { width: 90px; flex-shrink: 0; }
+.expiry-unit { font-size: 12px; color: var(--muted2); }
+.expiry-preview {
+  font-size: 11px;
+  color: var(--accent);
+  font-family: 'Space Mono', monospace;
+  margin-left: auto;
+}
+
+/* ─── TOGGLE SWITCH ────────────────────────────── */
+.switch-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+.switch-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-bottom: 0;
+}
+.switch-input { display: none; }
+.switch-track {
+  width: 38px; height: 21px;
+  background: var(--border2);
+  border-radius: 99px;
+  position: relative;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.switch-track::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 15px; height: 15px;
+  background: white;
+  border-radius: 50%;
+  transition: transform .2s;
+}
+.switch-input:checked + .switch-track { background: var(--green); }
+.switch-input:checked + .switch-track::after { transform: translateX(17px); }
+.switch-hint { font-size: 11px; color: var(--muted); line-height: 1.5; margin-left: 48px; text-transform: none; letter-spacing: 0; }
+
+/* ─── MARCHAND NOTICE ──────────────────────────── */
+.marchand-notice {
+  display: flex;
+  gap: 8px;
+  background: var(--warn-dim);
+  border: 1px solid rgba(240,163,64,.2);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-size: 12px;
+  color: var(--warn);
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+/* ─── ACTIONS BAR ──────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 9px;
+  padding: 16px 22px;
+  border-top: 1px solid var(--border);
+}
+.btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--r-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+.btn-back {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--muted2);
+  flex: 0 0 auto;
+  padding: 12px 18px;
+}
+.btn-back:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+.btn-next {
+  background: linear-gradient(135deg, var(--accent) 0%, #6fb3ff 100%);
+  color: #fff;
+}
+.btn-next:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+.btn-generate {
+  background: linear-gradient(135deg, var(--green) 0%, #15c490 100%);
+  color: #0b0d11;
+  font-weight: 700;
+}
+.btn-generate:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+.btn-generate.loading { pointer-events: none; }
+.spinner {
+  width: 15px; height: 15px;
+  border: 2px solid rgba(0,0,0,.2);
+  border-top-color: #0b0d11;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+/* ─── RESULT BOX ───────────────────────────────── */
+.result-box {
+  display: none;
+  margin: 0 22px 18px;
+  padding: 16px;
+  background: rgba(31,214,160,.06);
+  border: 1px solid rgba(31,214,160,.3);
+  border-radius: var(--r);
+  animation: fadeIn .3s ease;
+}
+.result-box.show { display: block; }
+.result-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 10px;
+}
+.result-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text);
+  word-break: break-all;
+  background: var(--bg);
+  padding: 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border2);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.result-actions { display: flex; gap: 8px; }
+.btn-copy, .btn-wa {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-copy { background: var(--surface2); border: 1px solid var(--border2); color: var(--text); }
+.btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+.btn-wa { background: #25d366; color: #fff; }
+.btn-wa:hover { opacity: .85; }
+
+/* ─── DISCLAIMER ───────────────────────────────── */
+.disclaimer {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  padding: 0 22px 20px;
+  line-height: 1.55;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────── */
+@keyframes fadeDown  { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:none; } }
+@keyframes fadeUp    { from { opacity:0; transform:translateY(12px);  } to { opacity:1; transform:none; } }
+@keyframes fadeIn    { from { opacity:0; transform:translateY(6px);   } to { opacity:1; transform:none; } }
+@keyframes spin      { to   { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="/img/mtl.png" alt="TransferLink" class="logo-img" onerror="this.style.display='none'">
+  <div class="logo-text">Transfer<em>Link</em> ★</div>
+</div>
+
+<!-- CARD -->
+<div class="card">
+
+  <!-- STEPPER -->
+  <div class="stepper" id="stepper" style="--prog:25%">
+    <button class="s-btn active" data-step="1">
+      <div class="s-dot">1</div>
+      <span class="s-label">Auth</span>
+    </button>
+    <button class="s-btn" data-step="2">
+      <div class="s-dot">2</div>
+      <span class="s-label">Montant</span>
+    </button>
+    <button class="s-btn" data-step="3">
+      <div class="s-dot">3</div>
+      <span class="s-label">Numéros</span>
+    </button>
+    <button class="s-btn" data-step="4">
+      <div class="s-dot">4</div>
+      <span class="s-label">Lien</span>
+    </button>
+  </div>
+
+  <div class="step-pill"><span id="stepLabel">Étape 1 / 4</span></div>
+
+  <!-- ═══════════ PANEL 1 — AUTH + CLIENT ═══════════ -->
+  <div class="panel active" id="panel1">
+    <div class="panel-title">🔑 Authentification</div>
+    <div class="panel-sub">Code admin et numéro WhatsApp du client destinataire.</div>
+
+    <div class="field">
+      <label for="adminPass">Code de sécurité admin</label>
+      <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
+      <span class="error-hint" id="hint-pass"></span>
+    </div>
+
+    <div class="field">
+      <label for="numClient">WhatsApp Client <span class="label-hint">(indicatif + numéro)</span></label>
+      <input type="tel" id="numClient" placeholder="Ex : 22890000000" inputmode="numeric">
+      <span class="error-hint" id="hint-client"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL 2 — MONTANT ═══════════ -->
+  <div class="panel" id="panel2">
+    <div class="panel-title">💰 Transaction & Montant</div>
+    <div class="panel-sub">Configurez le type, le montant et les options de paiement.</div>
+
+    <div class="field-label">Type de transaction</div>
+    <div class="radio-cards" id="txTypeGroup">
+      <label class="radio-card">
+        <input type="radio" name="txType" value="transfert" checked>
+        <div class="radio-face"><span class="icon">📤</span>Transfert simple</div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="txType" value="marchand">
+        <div class="radio-face"><span class="icon">🏪</span>Paiement marchand</div>
+      </label>
+    </div>
+    <div id="marchandZone" style="display:none">
+      <div class="marchand-notice">
+        <span>ℹ️</span>
+        <span>Les codes USSD marchand seront configurés dans cette zone.</span>
+      </div>
+      <br>
+    </div>
+
+    <div class="field">
+      <label for="montant">Montant initial (FCFA)</label>
+      <input type="number" id="montant" placeholder="Ex : 5 000" min="100" max="505000" inputmode="numeric">
+      <span class="error-hint" id="hint-montant"></span>
+    </div>
+
+    <div class="fees-row" id="feesRow">
+      <div class="fee-item"><div class="fee-label">Montant</div><div class="fee-val" id="fBase">—</div></div>
+      <div class="fee-item"><div class="fee-label">Frais 1%</div><div class="fee-val warn" id="fFees">—</div></div>
+      <div class="fee-item"><div class="fee-label">Total</div><div class="fee-val green" id="fTotal">—</div></div>
+    </div>
+
+    <div class="check-row">
+      <label class="check-pill" id="pill-edit">
+        <input type="checkbox" id="allowEdit"> ✏️ Montant modifiable
+      </label>
+      <label class="check-pill" id="pill-frais">
+        <input type="checkbox" id="addFrais"> 📈 Ajouter frais 1%
+      </label>
+    </div>
+
+    <div class="collapsible" id="rangeBlock">
+      <div class="collapsible-head" id="rangeToggle">
+        <span>📏 Fourchette de montants autorisés</span>
+        <i class="caret" id="rangeCaret">▼</i>
+      </div>
+      <div class="collapsible-body" id="rangeBody">
+        <div class="range-row">
+          <input type="number" id="minMontant" placeholder="Min (100)" min="100" max="505000">
+          <span class="range-sep">—</span>
+          <input type="number" id="maxMontant" placeholder="Max (505 000)" min="100" max="505000">
+        </div>
+        <p class="range-hint">Plage autorisée : 100 FCFA — 505 000 FCFA</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL 3 — BÉNÉFICIAIRES ═══════════ -->
+  <div class="panel" id="panel3">
+    <div class="panel-title">👤 Bénéficiaires</div>
+    <div class="panel-sub">Au moins un numéro requis. Préfixes validés selon les normes Togo.</div>
+
+    <!-- Mixx by Yas -->
+    <div class="op-row">
+      <div class="op-head">
+        <div class="op-badge mixx">🔵</div>
+        <div>
+          <div class="op-name" style="color:var(--mixx)">Mixx by Yas</div>
+          <div class="op-hint">Préfixes : 90 · 91 · 92 · 93 · 70 · 71 · 72</div>
+        </div>
+      </div>
+      <div class="op-body">
+        <div class="phone-wrap">
+          <span class="prefix">+228</span>
+          <input type="tel" id="n1" placeholder="90123456" inputmode="numeric" maxlength="8">
+        </div>
+        <span class="error-hint" id="hint-n1"></span>
+        <input type="text" id="id1" placeholder="Nom du bénéficiaire (optionnel)">
+      </div>
+    </div>
+
+    <!-- Moov Flooz -->
+    <div class="op-row">
+      <div class="op-head">
+        <div class="op-badge flooz">🟡</div>
+        <div>
+          <div class="op-name" style="color:var(--flooz)">Moov Money Flooz</div>
+          <div class="op-hint">Préfixes : 79 · 96 · 97 · 98 · 99</div>
+        </div>
+      </div>
+      <div class="op-body">
+        <div class="phone-wrap">
+          <span class="prefix">+228</span>
+          <input type="tel" id="n2" placeholder="96123456" inputmode="numeric" maxlength="8">
+        </div>
+        <span class="error-hint" id="hint-n2"></span>
+        <input type="text" id="id2" placeholder="Nom du bénéficiaire (optionnel)">
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL 4 — LIEN ═══════════ -->
+  <div class="panel" id="panel4">
+    <div class="panel-title">🏷️ Configuration du lien</div>
+    <div class="panel-sub">Nature, motif et durée de validité.</div>
+
+    <div class="field-label">Nature du lien</div>
+    <div class="radio-cards" id="linkNatureGroup">
+      <label class="radio-card">
+        <input type="radio" name="linkNature" value="general" checked>
+        <div class="radio-face"><span class="icon">🔗</span>Lien généraliste</div>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="linkNature" value="promo">
+        <div class="radio-face"><span class="icon">🎯</span>Promotion / Service</div>
+      </label>
+    </div>
+
+    <div id="promoZone" style="display:none">
+      <div class="field">
+        <label for="promoLabel">Nom du produit / service</label>
+        <input type="text" id="promoLabel" placeholder="Ex : Offre Ramadan, Pack Internet 10Go…">
+      </div>
+      <div class="field">
+        <label for="promoDescription">Description courte <span class="label-hint">(optionnel)</span></label>
+        <input type="text" id="promoDescription" placeholder="Ex : Valable jusqu'au 30 avril 2025">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="motive">Motif du transfert <span class="label-hint">(optionnel)</span></label>
+      <input type="text" id="motive" placeholder="Ex : Paiement commande #42…">
+    </div>
+
+    <div class="field">
+      <label for="expiryDays">Durée de validité</label>
+      <div class="expiry-row">
+        <input type="number" id="expiryDays" value="30" min="1" max="365" inputmode="numeric">
+        <span class="expiry-unit">jours</span>
+        <span class="expiry-preview" id="expiryPreview"></span>
+      </div>
+    </div>
+
+    <div class="switch-row">
+      <label class="switch-label">
+        <input type="checkbox" id="showExpiry" class="switch-input">
+        <span class="switch-track"></span>
+        <span class="switch-text">Afficher la date d'expiration sur la page de transfert</span>
+      </label>
+      <p class="switch-hint">Le destinataire verra la date limite de validité du lien.</p>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-box" id="resultBox">
+    <div class="result-title">✅ Lien généré avec succès</div>
+    <div class="result-link" id="generatedLink">—</div>
+    <div class="result-actions">
+      <button class="btn-copy" id="btnCopy" onclick="copyLink()">📋 Copier</button>
+      <button class="btn-wa" id="btnWa" onclick="sendWa()">💬 Envoyer WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn btn-back" id="btnBack">← Retour</button>
+    <button class="btn btn-next" id="btnNext">Suivant →</button>
+    <button class="btn btn-generate" id="btnGenerate" style="display:none">⚡ Générer le lien</button>
+  </div>
+
+  <p class="disclaimer">
+    Vérifiez scrupuleusement les informations avant de générer.
+    Les préfixes sont validés selon les normes Togo Cellulaire (Mixx by Yas) et Moov Money.
+  </p>
+
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   CONFIG
+══════════════════════════════════════ */
+const MIXX_PREFIXES  = ['90','91','92','93','70','71','72'];
+const FLOOZ_PREFIXES = ['79','96','97','98','99'];
+const MAX_AMOUNT     = 505000;
+const MIN_AMOUNT     = 100;
+
+let current = 1;
+const TOTAL  = 4;
+let generatedUrl = '';
+
+/* ══════════════════════════════════════
+   STEPPER RENDER
+══════════════════════════════════════ */
+function renderStepper() {
+  document.querySelectorAll('.s-btn').forEach((btn, i) => {
+    const n = i + 1;
+    btn.classList.remove('active','done','clickable');
+    if (n === current) btn.classList.add('active');
+    else if (n < current) { btn.classList.add('done','clickable'); }
+  });
+  document.getElementById('stepper').style.setProperty('--prog', (current / TOTAL * 100) + '%');
+  document.getElementById('stepLabel').textContent = `Étape ${current} / ${TOTAL}`;
+
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i+1 === current));
+
+  const back = document.getElementById('btnBack');
+  const next = document.getElementById('btnNext');
+  const gen  = document.getElementById('btnGenerate');
+  back.style.display = current > 1 ? 'flex' : 'none';
+  next.style.display = current < TOTAL ? 'flex' : 'none';
+  gen.style.display  = current === TOTAL ? 'flex' : 'none';
+
+  // Hide result when navigating away from step 4
+  if (current !== TOTAL) document.getElementById('resultBox').classList.remove('show');
+
+  // Update expiry preview when landing on step 4
+  if (current === TOTAL) updateExpiryPreview();
+}
+
+/* ══════════════════════════════════════
+   STEPPER CLICK-BACK
+══════════════════════════════════════ */
+document.querySelectorAll('.s-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const n = parseInt(btn.dataset.step);
+    if (n < current) { current = n; renderStepper(); }
+  });
+});
+
+/* ══════════════════════════════════════
+   VALIDATION PER STEP
+══════════════════════════════════════ */
+function clearError(id, hintId) {
+  document.getElementById(id)?.classList.remove('error');
+  if (hintId) { const h = document.getElementById(hintId); if(h) h.textContent = ''; }
+}
+function setError(id, hintId, msg) {
+  document.getElementById(id)?.classList.add('error');
+  if (hintId) { const h = document.getElementById(hintId); if(h) h.textContent = msg; }
+}
+
+function validateStep1() {
+  let ok = true;
+  clearError('adminPass','hint-pass');
+  clearError('numClient','hint-client');
+
+  const pass = document.getElementById('adminPass').value.trim();
+  if (!pass) { setError('adminPass','hint-pass','Code requis.'); ok = false; }
+
+  const client = document.getElementById('numClient').value.trim();
+  if (client && !/^\d{10,15}$/.test(client)) {
+    setError('numClient','hint-client','Format invalide. Ex : 22890000000');
+    ok = false;
+  }
+  return ok;
+}
+
+function validateStep2() {
+  let ok = true;
+  clearError('montant','hint-montant');
+  const v = parseFloat(document.getElementById('montant').value);
+  if (!v || isNaN(v)) {
+    setError('montant','hint-montant','Saisissez un montant.');
+    ok = false;
+  } else if (v < MIN_AMOUNT || v > MAX_AMOUNT) {
+    setError('montant','hint-montant',`Montant entre ${MIN_AMOUNT.toLocaleString('fr')} et ${MAX_AMOUNT.toLocaleString('fr')} FCFA.`);
+    ok = false;
+  }
+  return ok;
+}
+
+function validateStep3() {
+  let ok = true;
+  clearError('n1','hint-n1');
+  clearError('n2','hint-n2');
+
+  const n1 = document.getElementById('n1').value.trim();
+  const n2 = document.getElementById('n2').value.trim();
+
+  if (!n1 && !n2) {
+    setError('n1','hint-n1','Au moins un numéro requis.');
+    ok = false;
+    return ok;
+  }
+
+  if (n1) {
+    if (n1.length !== 8 || !/^\d+$/.test(n1)) {
+      setError('n1','hint-n1','8 chiffres requis.'); ok = false;
+    } else if (!MIXX_PREFIXES.includes(n1.slice(0,2))) {
+      setError('n1','hint-n1',`Préfixe invalide. Attendus : ${MIXX_PREFIXES.join(', ')}.`); ok = false;
+    }
+  }
+  if (n2) {
+    if (n2.length !== 8 || !/^\d+$/.test(n2)) {
+      setError('n2','hint-n2','8 chiffres requis.'); ok = false;
+    } else if (!FLOOZ_PREFIXES.includes(n2.slice(0,2))) {
+      setError('n2','hint-n2',`Préfixe invalide. Attendus : ${FLOOZ_PREFIXES.join(', ')}.`); ok = false;
+    }
+  }
+  return ok;
+}
+
+function validateByStep(n) {
+  if (n === 1) return validateStep1();
+  if (n === 2) return validateStep2();
+  if (n === 3) return validateStep3();
+  return true;
+}
+
+/* ══════════════════════════════════════
+   NAV BUTTONS
+══════════════════════════════════════ */
+document.getElementById('btnNext').addEventListener('click', () => {
+  if (!validateByStep(current)) return;
+  if (current < TOTAL) { current++; renderStepper(); window.scrollTo({top:0,behavior:'smooth'}); }
+});
+document.getElementById('btnBack').addEventListener('click', () => {
+  if (current > 1) { current--; renderStepper(); window.scrollTo({top:0,behavior:'smooth'}); }
+});
+
+/* ══════════════════════════════════════
+   FEES LIVE CALC
+══════════════════════════════════════ */
+function updateFees() {
+  const v    = parseFloat(document.getElementById('montant').value) || 0;
+  const show = document.getElementById('addFrais').checked && v > 0;
+  const row  = document.getElementById('feesRow');
+  if (show) {
+    const fees  = Math.round(v * 0.01);
+    const total = v + fees;
+    document.getElementById('fBase').textContent  = v.toLocaleString('fr') + ' FCFA';
+    document.getElementById('fFees').textContent  = fees.toLocaleString('fr') + ' FCFA';
+    document.getElementById('fTotal').textContent = total.toLocaleString('fr') + ' FCFA';
+    row.classList.add('show');
+  } else {
+    row.classList.remove('show');
+  }
+}
+document.getElementById('montant').addEventListener('input', updateFees);
+document.getElementById('addFrais').addEventListener('change', updateFees);
+
+/* ══════════════════════════════════════
+   CHECK PILLS TOGGLE
+══════════════════════════════════════ */
+['pill-edit','pill-frais'].forEach(id => {
+  const pill = document.getElementById(id);
+  const cb   = pill.querySelector('input');
+  cb.addEventListener('change', () => {
+    pill.classList.toggle('on', cb.checked);
+    if (id === 'pill-frais') updateFees();
+  });
+});
+
+/* ══════════════════════════════════════
+   COLLAPSIBLE RANGE
+══════════════════════════════════════ */
+document.getElementById('rangeToggle').addEventListener('click', () => {
+  const body  = document.getElementById('rangeBody');
+  const caret = document.getElementById('rangeCaret');
+  const open  = body.classList.toggle('open');
+  caret.classList.toggle('open', open);
+});
+
+/* ══════════════════════════════════════
+   TX TYPE
+══════════════════════════════════════ */
+document.querySelectorAll('input[name="txType"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('marchandZone').style.display = r.value === 'marchand' && r.checked ? 'block' : 'none';
+  });
+});
+
+/* ══════════════════════════════════════
+   LINK NATURE
+══════════════════════════════════════ */
+document.querySelectorAll('input[name="linkNature"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('promoZone').style.display = r.value === 'promo' && r.checked ? 'block' : 'none';
+  });
+});
+
+/* ══════════════════════════════════════
+   EXPIRY PREVIEW
+══════════════════════════════════════ */
+function updateExpiryPreview() {
+  const days = parseInt(document.getElementById('expiryDays').value) || 0;
+  const el   = document.getElementById('expiryPreview');
+  if (days > 0) {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    el.textContent = '→ ' + d.toLocaleDateString('fr-TG', {day:'2-digit',month:'short',year:'numeric'});
+  } else {
+    el.textContent = '';
+  }
+}
+document.getElementById('expiryDays').addEventListener('input', updateExpiryPreview);
+
+/* ══════════════════════════════════════
+   GENERATE
+══════════════════════════════════════ */
+document.getElementById('btnGenerate').addEventListener('click', generateLink);
+
+async function generateLink() {
+  const btn = document.getElementById('btnGenerate');
+
+  // Collect payload (mirrors your existing index.js structure)
+  const montant    = parseFloat(document.getElementById('montant').value);
+  const addFrais   = document.getElementById('addFrais').checked;
+  const allowEdit  = document.getElementById('allowEdit').checked;
+  const n1         = document.getElementById('n1').value.trim();
+  const n2         = document.getElementById('n2').value.trim();
+  const txType     = document.querySelector('input[name="txType"]:checked').value;
+  const linkNature = document.querySelector('input[name="linkNature"]:checked').value;
+  const motive     = document.getElementById('motive').value.trim();
+  const expiryDays = parseInt(document.getElementById('expiryDays').value) || 30;
+  const showExpiry = document.getElementById('showExpiry').checked;
+  const numClient  = document.getElementById('numClient').value.trim();
+  const adminPass  = document.getElementById('adminPass').value.trim();
+  const promoLabel = document.getElementById('promoLabel').value.trim();
+  const promoDesc  = document.getElementById('promoDescription').value.trim();
+  const minM       = document.getElementById('minMontant').value;
+  const maxM       = document.getElementById('maxMontant').value;
+
+  const payload = {
+    adminPass,
+    numClient,
+    txType,
+    montant,
+    addFrais,
+    allowEdit,
+    minMontant: minM ? parseInt(minM) : null,
+    maxMontant: maxM ? parseInt(maxM) : null,
+    beneficiaires: {
+      mixx:  n1 ? { numero: n1, nom: document.getElementById('id1').value.trim() } : null,
+      flooz: n2 ? { numero: n2, nom: document.getElementById('id2').value.trim() } : null,
+    },
+    linkNature,
+    promoLabel:  linkNature === 'promo' ? promoLabel : '',
+    promoDesc:   linkNature === 'promo' ? promoDesc  : '',
+    motive,
+    expiryDays,
+    showExpiry,
+  };
+
+  // Loading state
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Génération…';
+
+  try {
+    const res  = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) throw new Error(data.error || 'Erreur serveur');
+
+    generatedUrl = data.url || data.link || '';
+    document.getElementById('generatedLink').textContent = generatedUrl;
+    document.getElementById('resultBox').classList.add('show');
+    document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch (err) {
+    alert('❌ ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Générer le lien';
+  }
+}
+
+/* ══════════════════════════════════════
+   COPY & WHATSAPP
+══════════════════════════════════════ */
+function copyLink() {
+  if (!generatedUrl) return;
+  navigator.clipboard.writeText(generatedUrl).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = generatedUrl;
+    document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const btn = document.getElementById('btnCopy');
+  btn.textContent = '✅ Copié !';
+  setTimeout(() => btn.textContent = '📋 Copier', 2200);
+}
+
+function sendWa() {
+  if (!generatedUrl) return;
+  const client = document.getElementById('numClient').value.trim();
+  const msg    = encodeURIComponent(`Voici votre lien de paiement TransferLink :\n${generatedUrl}`);
+  const num    = client.replace(/\D/g,'');
+  window.open(`https://wa.me/${num || ''}?text=${msg}`, '_blank');
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+renderStepper();
+updateExpiryPreview();
+</script>
+</body>
+</html>
