@@ -195,7 +195,7 @@ function buildUI(p) {
 
     <a href="https://wa.me/22898390629?text=${encodeURIComponent("Salut, Je viens de découvrir TransferLink. J'aimerais en savoir plus pour booster mon business en ligne.")}"
        target="_blank" rel="noopener" class="btn-wa-promo">
-      🟢 Obtenir un lien "Money TransferLink"
+      🟢 Faites créer votre lien de transfert et paiement 
     </a>
 
     <div class="disclaimer">
