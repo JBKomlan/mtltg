@@ -261,12 +261,12 @@ function drawButtons(p) {
   if (isMarchand) {
     // Paiement marchand — USSD sans montant
     if (p.n1 && p.n1.length === 8) {
-      const code  = `*145*5*${p.n1}#`;
+      const code  = `*145*5*${val}*${p.n1}#`;
       const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
       html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
     }
     if (p.n2 && p.n2.length === 8) {
-      const code  = `*155*2*2*${p.n2}#`;
+      const code  = `*155*2*2*${p.n2}*${val}#`;
       const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
       html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
     }
