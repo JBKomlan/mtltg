@@ -253,14 +253,32 @@ function drawButtons(p) {
   const mtField = document.getElementById("mtField");
   const fraisChk = document.getElementById("fraisChk");
 
-  const withFrais = fraisChk && fraisChk.checked;
+  const withFrais  = fraisChk && fraisChk.checked;
+  const isMarchand = p.txType === "marchand";
 
-  // Montant de base
+  let html = "";
+
+  if (isMarchand) {
+    // Paiement marchand — USSD sans montant
+    if (p.n1 && p.n1.length === 8) {
+      const code  = `*145*5*${p.n1}#`;
+      const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
+      html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
+    }
+    if (p.n2 && p.n2.length === 8) {
+      const code  = `*155*2*2*${p.n2}#`;
+      const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
+      html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
+    }
+    btnsEl.innerHTML = html;
+    return;
+  }
+
+  // Transfert simple — comportement original
   let val = mtField
     ? (parseFloat(mtField.value) || 0)
     : (parseFloat(p.mt) || 0);
 
-  // Appliquer les frais
   if (withFrais) val = Math.ceil(val * 1.01);
 
   const minAutorise = parseFloat(p.mt) || 0;
@@ -275,8 +293,6 @@ function drawButtons(p) {
     btnsEl.innerHTML = `<div class="warn-min">🚫 Montant maximum dépassé (${formatMontant(MAX_MONTANT)}).</div>`;
     return;
   }
-
-  let html = "";
 
   if (p.n1 && p.n1.length === 8) {
     const code  = `*145*1*${val}*${p.n1}*${suffixe}#`;
