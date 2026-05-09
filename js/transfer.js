@@ -248,33 +248,16 @@ function checkPlafond(p) {
 /* ═══════════════════════════════════════════════════════
    Rendu des boutons USSD
 ═══════════════════════════════════════════════════════ */
+
 function drawButtons(p) {
-  const btnsEl  = document.getElementById("btns");
-  const mtField = document.getElementById("mtField");
+  const btnsEl   = document.getElementById("btns");
+  const mtField  = document.getElementById("mtField");
   const fraisChk = document.getElementById("fraisChk");
 
   const withFrais  = fraisChk && fraisChk.checked;
   const isMarchand = p.txType === "marchand";
 
-  let html = "";
-
-  if (isMarchand) {
-    // Paiement marchand — USSD sans montant
-    if (p.n1 && p.n1.length === 8) {
-      const code  = `*145*5*${val}*${p.n1}#`;
-      const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
-      html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
-    }
-    if (p.n2 && p.n2.length === 8) {
-      const code  = `*155*2*2*${p.n2}*${val}#`;
-      const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
-      html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
-    }
-    btnsEl.innerHTML = html;
-    return;
-  }
-
-  // Transfert simple — comportement original
+  // Calcul du montant — commun aux deux modes
   let val = mtField
     ? (parseFloat(mtField.value) || 0)
     : (parseFloat(p.mt) || 0);
@@ -284,31 +267,44 @@ function drawButtons(p) {
   const minAutorise = parseFloat(p.mt) || 0;
   const suffixe     = withFrais ? "2" : "1";
 
+  // Gardes-fous — communs aux deux modes
   if (val < minAutorise) {
     btnsEl.innerHTML = `<div class="warn-min">⚠️ Le montant ne peut pas être inférieur à ${formatMontant(minAutorise)}.</div>`;
     return;
   }
-
   if (val > MAX_MONTANT) {
     btnsEl.innerHTML = `<div class="warn-min">🚫 Montant maximum dépassé (${formatMontant(MAX_MONTANT)}).</div>`;
     return;
   }
 
-  if (p.n1 && p.n1.length === 8) {
-    const code  = `*145*1*${val}*${p.n1}*${suffixe}#`;
-    const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
-    html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
-  }
+  let html = "";
 
-  if (p.n2 && p.n2.length === 8) {
-    const code  = `*155*1*1*${p.n2}*${p.n2}*${val}*${suffixe}#`;
-    const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
-    html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
+  if (isMarchand) {
+    if (p.n1 && p.n1.length === 8) {
+      const code  = `*145*5*${p.n1}*${val}#`;
+      const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
+      html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
+    }
+    if (p.n2 && p.n2.length === 8) {
+      const code  = `*155*2*2*${p.n2}*${val}#`;
+      const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
+      html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
+    }
+  } else {
+    if (p.n1 && p.n1.length === 8) {
+      const code  = `*145*1*${val}*${p.n1}*${suffixe}#`;
+      const label = `Mixx → ${p.n1}${p.id1 ? " · " + p.id1 : ""}`;
+      html += btnRow("t", "tmoney", code, label, "/img/mixx-tg.png");
+    }
+    if (p.n2 && p.n2.length === 8) {
+      const code  = `*155*1*1*${p.n2}*${p.n2}*${val}*${suffixe}#`;
+      const label = `Flooz → ${p.n2}${p.id2 ? " · " + p.id2 : ""}`;
+      html += btnRow("m", "flooz", code, label, "/img/flooz-tg.png");
+    }
   }
 
   btnsEl.innerHTML = html;
 }
-
 /* ═══════════════════════════════════════════════════════
    Ligne bouton + icône copie
 ═══════════════════════════════════════════════════════ */
