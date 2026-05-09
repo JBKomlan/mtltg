@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Affichage zone marchand
       const isMarchand = radio.value === "marchand";
       document.getElementById("marchandZone").style.display = isMarchand ? "block" : "none";
+      // Mise à jour des labels bénéficiaires selon le mode
+      updateBeneficiaireLabels(isMarchand);
     });
   });
 
@@ -53,6 +55,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateExpiryPreview();
   expiryInput.addEventListener("input", updateExpiryPreview);
 });
+
+/* ---------- Mise à jour des labels bénéficiaires ---------- */
+function updateBeneficiaireLabels(isMarchand) {
+  // Labels des sections opérateurs
+  document.querySelector(".net-section.tmoney label:first-of-type").innerHTML = isMarchand
+    ? "🔵 Compte marchand Mixx <span class=\"label-hint\">(90 / 91 / 92 / 93 / 70 / 71 / 72)</span>"
+    : "🔵 Mixx by Yas <span class=\"label-hint\">(90 / 91 / 92 / 93 / 70 / 71 / 72)</span>";
+
+  document.querySelector(".net-section.flooz label:first-of-type").innerHTML = isMarchand
+    ? "🟡 Compte marchand Flooz <span class=\"label-hint\">(79 / 96 / 97 / 98 / 99)</span>"
+    : "🟡 Moov Money Flooz <span class=\"label-hint\">(79 / 96 / 97 / 98 / 99)</span>";
+
+  // Placeholder champ nom
+  document.getElementById("id1").placeholder = isMarchand ? "Nom du commerce (optionnel)" : "Nom du bénéficiaire (optionnel)";
+  document.getElementById("id2").placeholder = isMarchand ? "Nom du commerce (optionnel)" : "Nom du bénéficiaire (optionnel)";
+}
 
 /* ---------- Preview de la date d'expiration ---------- */
 function updateExpiryPreview() {
