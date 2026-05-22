@@ -192,11 +192,12 @@ function buildUI(p) {
       💡 En cas de souci avec le bouton de transfert, utilisez l'icône de copie
       à droite après le clic pour coller le code manuellement dans votre clavier d'appel.
     </div>
-
-    /* <a href="https://wa.me/22898390629?text=${encodeURIComponent("Salut, Je viens de découvrir TransferLink. J'aimerais en savoir plus pour booster mon business en ligne.")}"
+    /* ── <a href="https://wa.me/22898390629?text=${encodeURIComponent("Salut, Je viens de découvrir TransferLink. J'aimerais en savoir plus pour booster mon business en ligne.")}"
        target="_blank" rel="noopener" class="btn-wa-promo">
       🟢 Faites Créer Votre Lien de Transfert et Paiement 
-    </a> ...*/
+    </a> ── */
+
+   
 
     <div class="disclaimer">
       <b>Disclaimer :</b> Vérifiez le montant, le numéro et l'identité du destinataire
