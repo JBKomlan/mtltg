@@ -175,7 +175,7 @@ function buildUI(p) {
     ${expiryNotice}
 
     <img src="/img/mtl.png" alt="Money-TransferLink" class="logo-img">
-    <span class="logo-text">*****</span>
+    <span class="logo-text">Payment - Transfer USSD Link</span>
 
     <div class="reassurance">
       ℹ️ Après avoir cliqué, validez simplement l'appel sur votre téléphone.
