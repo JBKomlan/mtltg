@@ -28,7 +28,7 @@ body {
 .logo-img       { width: 70px; height: auto; margin-bottom: 8px; display: block; margin-inline: auto; }
 .logo-text {
   display: block;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
   background: linear-gradient(45deg, #0056b3, #d4af37);
   -webkit-background-clip: text;
