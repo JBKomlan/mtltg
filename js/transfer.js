@@ -303,13 +303,13 @@ function drawButtons(p) {
   btnsEl.innerHTML = html;
 
   // ── Auto-dial : ouvre le composeur au premier rendu ──
-  if (!window._autoDialDone) {
+ /* if (!window._autoDialDone) {
     window._autoDialDone = true;
     const firstLink = btnsEl.querySelector("a.btn-pay");
     if (firstLink) {
       setTimeout(() => firstLink.click(), 300);
     }
-}
+} */
 }
 /* ═══════════════════════════════════════════════════════
    Ligne bouton + icône copie
