@@ -189,8 +189,9 @@ function buildUI(p) {
     <div id="btns"></div>
 
     <div class="help-text">
-      💡 En cas de souci avec le bouton de transfert, utilisez l'icône de copie
-      à droite après le clic pour coller le code manuellement dans votre clavier d'appel.
+      💡 En cas de souci avec le bouton initiateur de transfert, cliquez sur l'icône de copie apparue 
+      à droite après le clic du bouton pour coller le code manuellement dans votre clavier d'appel 
+      et lancer l'appel sur la SIM convenable.
     </div>
 
    
