@@ -174,7 +174,7 @@ function buildUI(p) {
     ${promoBlock}
     ${expiryNotice}
 
-    <img src="img/1782451897003.png" alt="Money-TransferLink" class="logo-img">
+    <img src="/img/1782451897003.png" alt="Money-TransferLink" class="logo-img">
     <span class="logo-text">Payment - Transfer USSD Link</span>
 
     <div class="reassurance">
