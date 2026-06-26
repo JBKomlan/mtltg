@@ -328,13 +328,13 @@ body {
   text-align: left;
 }
 .help-toggle:hover {
-  background: #f8fafc;
+  background: #9FFFDF;
 }
 .help-text {
   margin-top: 8px;
   font-size: 12px;
   color: #718096;
-  background: #f8fafc;
+  background: #9FFFDF;
   padding: 10px;
   border-radius: 8px;
   line-height: 1.5;
