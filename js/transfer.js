@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const app = document.getElementById("app");
 
   try { await initConfig(); } catch {
-    app.innerHTML = erreurHTML("⚠️ Impossible de charger la configuration.");
+    app.innerHTML = erreurHTML("⚠️ Impossible de charger la configuration. Effectuez la mise à jour de votre navigateur et réessayez.");
     return;
   }
 
