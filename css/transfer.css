@@ -300,7 +300,7 @@ body {
   margin-top: 10px;
 }
 
-/* ---------- Help text ---------- */
+/* ---------- Help text ---------- 
 .help-text {
   font-size: 11px;
   color: #64748b;
@@ -311,7 +311,7 @@ body {
   padding: 10px;
   border-radius: 8px;
   text-align: left;
-}
+} */
 
 /* ---------- WhatsApp promo ---------- */
 @keyframes pulse-green {
