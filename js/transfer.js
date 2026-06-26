@@ -194,13 +194,13 @@ function buildUI(p) {
   </button>
   <div class="help-text" id="helpText" style="display:none;">
     💡 En cas de souci avec le bouton initiateur de transfert, cliquez sur l'icône de copie apparue 
-    à droite après le clic du bouton pour coller le code manuellement dans votre clavier d'appel 
+    à droite après le clic du bouton puis coller le code manuellement dans votre clavier d'appel téléphonique 
     et lancer l'appel sur la SIM convenable.
   </div>
 </div>
 
     <div class="disclaimer">
-      <b>Disclaimer :</b> Vérifiez le montant, le numéro et l'identité du destinataire
+      <b>Disclaimer :</b> Veuillez vérifier le montant, le numéro et l'identité du destinataire
       avant toute validation finale. Nous déclinons toute responsabilité en cas d'une manipulation erronée.
     </div>
 
