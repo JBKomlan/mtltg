@@ -219,7 +219,7 @@ async function generer() {
     ligneMotif +
     lignePromo +
     `_______________________\n` +
-    `_*Cliquez sur le lien pour finaliser votre transfert.*_`;
+    `_*Cliquez sur le lien pour finaliser votre transaction.*_`;
 
   const msg = lienFinal + "\n" + guideText;
 
