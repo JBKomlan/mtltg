@@ -188,13 +188,16 @@ function buildUI(p) {
 
     <div id="btns"></div>
 
-    <div class="help-text">
-      💡 En cas de souci avec le bouton initiateur de transfert, cliquez sur l'icône de copie apparue 
-      à droite après le clic du bouton pour coller le code manuellement dans votre clavier d'appel 
-      et lancer l'appel sur la SIM convenable.
-    </div>
-
-   
+    <div class="help-wrapper">
+  <button type="button" class="help-toggle" id="helpToggle" onclick="toggleHelp()">
+    ❔ Besoin d'aide ?
+  </button>
+  <div class="help-text" id="helpText" style="display:none;">
+    💡 En cas de souci avec le bouton initiateur de transfert, cliquez sur l'icône de copie apparue 
+    à droite après le clic du bouton pour coller le code manuellement dans votre clavier d'appel 
+    et lancer l'appel sur la SIM convenable.
+  </div>
+</div>
 
     <div class="disclaimer">
       <b>Disclaimer :</b> Vérifiez le montant, le numéro et l'identité du destinataire
@@ -358,3 +361,22 @@ function escHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+function toggleHelp() {
+  const txt = document.getElementById("helpText");
+  const btn = document.getElementById("helpToggle");
+  const isHidden = txt.style.display === "none";
+  txt.style.display = isHidden ? "block" : "none";
+  btn.textContent = isHidden ? "✖ Fermer l'aide" : "❔ Besoin d'aide ?";
+}
+
+// Ferme l'aide si on clique en dehors du wrapper
+document.addEventListener("click", (e) => {
+  const wrapper = document.querySelector(".help-wrapper");
+  const txt = document.getElementById("helpText");
+  if (!wrapper || !txt || txt.style.display === "none") return;
+
+  if (!wrapper.contains(e.target)) {
+    txt.style.display = "none";
+    document.getElementById("helpToggle").textContent = "❔ Besoin d'aide ?";
+  }
+});
