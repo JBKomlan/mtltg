@@ -211,18 +211,27 @@ async function generer() {
     : "";
   const ligneType   = transactionType === "marchand" ? `*Type:* Paiement marchand\n` : "";
 
-  const guideText =
-    `\n*N°*${n1}  ${n2}\n` +
-    `*Id.* ${id1 || id2}\n` +
-    `*Montant:* [ *${montantFormate}* ]\n` +
-    ligneType +
-    ligneMotif +
-    lignePromo +
-    `_______________________\n` +
-    `_*Cliquez sur le lien pour finaliser votre transaction.*_`;
+  // Casse la détection automatique des numéros par WhatsApp
+const sansLien = (n) => String(n).replace(/(\d{2})(?=\d)/g, "$1\u200B");
 
-  const msg = lienFinal + "\n" + guideText;
+// Garde seulement les numéros non vides
+const numeros = [n1, n2]
+  .filter(Boolean)
+  .map((n) => `*${sansLien(n)}*`)
+  .join("  ");
 
+const guideText =
+  `\n*N°* ${numeros}\n` +
+  `*Id.* ${id1 || id2}\n` +
+  `*Montant:* [ *${montantFormate}* ]\n` +
+  ligneType +
+  ligneMotif +
+  lignePromo +
+  `______________________\n` +
+  `_*Cliquez sur le lien pour finaliser votre transaction.*_`; // garde ta fin de ligne d'origine
+
+const msg = lienFinal + "\n" + guideText;
+  
   // 7. Affichage résultat
   document.getElementById("resume").textContent = `Lien généré pour ${montantFormate}`;
   document.getElementById("waArea").innerHTML =
