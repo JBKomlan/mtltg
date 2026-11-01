@@ -212,7 +212,7 @@ async function generer() {
   const ligneType   = transactionType === "marchand" ? `*Type:* Paiement marchand\n` : "";
 
   const guideText =
-    `\n*N°* *${n1}*  *${n2}*\n` +
+    `\n*N°*${n1}  ${n2}\n` +
     `*Id.* ${id1 || id2}\n` +
     `*Montant:* [ *${montantFormate}* ]\n` +
     ligneType +
